@@ -1,4 +1,4 @@
-import { Bitcoin, Menu, X } from "lucide-react";
+import { Bitcoin, Menu, X, Building2, Code } from "lucide-react";
 import { useAppContext } from "../../hooks/useAppContext";
 import { useState } from "react";
 
@@ -52,6 +52,34 @@ export const Header = () => {
     }
   }, [user]);
 
+  // Role indicator component
+  const RoleIndicator = ({ mobile = false }) => {
+    if (!user?.success) return null;
+
+    const isCompany = user.user.role === "COMPANY";
+    const isDeveloper = user.user.role === "DEVELOPER";
+
+    if (!isCompany && !isDeveloper) return null;
+
+    return (
+      <div
+        className={`flex items-center gap-1 ${mobile ? "text-xs" : "text-xs"}`}
+      >
+        {isCompany ? (
+          <>
+            <Building2 className="w-3 h-3 text-blue-500" />
+            <span className="text-blue-600 font-medium">Company</span>
+          </>
+        ) : (
+          <>
+            <Code className="w-3 h-3 text-green-500" />
+            <span className="text-green-600 font-medium">Developer</span>
+          </>
+        )}
+      </div>
+    );
+  };
+
   const NavigationLinks = ({ mobile = false, onLinkClick = () => {} }) => (
     <ul
       className={`flex ${mobile ? "flex-col space-y-4" : "items-center gap-6"}`}
@@ -101,22 +129,27 @@ export const Header = () => {
               Bounties
             </Link>
           </li>
-
-          <li>
-            <Link
-              to="/submissions"
-              onClick={onLinkClick}
-              className={`text-sm font-medium transition-colors ${
-                location.pathname === "/submissions"
-                  ? "text-orange-600"
-                  : "text-gray-700 hover:text-orange-600"
-              } ${mobile ? "block py-2" : ""}`}
-            >
-              Submissions
-            </Link>
-          </li>
         </>
       )}
+
+      <li>
+        <Link
+          to={
+            user?.success && user.user.role == "DEVELOPER"
+              ? "/submissions"
+              : "/company-submissions"
+          }
+          onClick={onLinkClick}
+          className={`text-sm font-medium transition-colors ${
+            location.pathname === "/submissions" ||
+            location.pathname === "/company-submissions"
+              ? "text-orange-600"
+              : "text-gray-700 hover:text-orange-600"
+          } ${mobile ? "block py-2" : ""}`}
+        >
+          Submissions
+        </Link>
+      </li>
 
       <li>
         <Link
@@ -171,33 +204,41 @@ export const Header = () => {
               <>
                 {/* Desktop User Menu */}
                 <div className="hidden md:block">
-                  <DropdownMenu>
-                    <DropdownMenuTrigger
-                      asChild
-                      className="flex cursor-pointer items-center gap-5"
-                    >
-                      <Avatar className="size-[43px] bg-slate-950 text-slate-50">
-                        <AvatarFallback className="bg-transparent">
-                          {name && name[0].toUpperCase()}
-                        </AvatarFallback>
-                      </Avatar>
-                    </DropdownMenuTrigger>
+                  {/* Role indicator for desktop */}
+                  <div className="flex items-center gap-3">
+                    <RoleIndicator />
+                    <DropdownMenu>
+                      <DropdownMenuTrigger
+                        asChild
+                        className="flex cursor-pointer items-center gap-5"
+                      >
+                        <Avatar className="size-[43px] bg-slate-950 text-slate-50">
+                          <AvatarFallback className="bg-transparent">
+                            {name && name[0].toUpperCase()}
+                          </AvatarFallback>
+                        </Avatar>
+                      </DropdownMenuTrigger>
 
-                    <DropdownMenuContent>
-                      <DropdownMenuItem onClick={handleLogout}>
-                        Logout
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+                      <DropdownMenuContent>
+                        <DropdownMenuItem onClick={handleLogout}>
+                          Logout
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
                 </div>
 
                 {/* Mobile Menu Button */}
                 <div className="md:hidden flex items-center gap-3">
-                  <Avatar className="size-[35px] bg-slate-950 text-slate-50">
-                    <AvatarFallback className="bg-transparent text-sm">
-                      {name && name[0].toUpperCase()}
-                    </AvatarFallback>
-                  </Avatar>
+                  <div className="flex flex-col items-center gap-1">
+                    <Avatar className="size-[35px] bg-slate-950 text-slate-50">
+                      <AvatarFallback className="bg-transparent text-sm">
+                        {name && name[0].toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
+                    {/* Role indicator for mobile */}
+                    <RoleIndicator mobile />
+                  </div>
 
                   <button
                     onClick={toggleMobileMenu}

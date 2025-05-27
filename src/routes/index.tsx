@@ -10,6 +10,7 @@ import { CompanyBounties } from "./company-bounties";
 
 import TransactionsPage from "./transactions";
 import Submissions from "./submissions";
+import CompanySubmissions from "./company-submissions";
 
 export const router = createBrowserRouter([
   {
@@ -72,6 +73,16 @@ export const router = createBrowserRouter([
           {
             index: true,
             element: <Submissions />,
+          },
+        ],
+      },
+
+      {
+        path: "company-submissions",
+        children: [
+          {
+            index: true,
+            element: <CompanySubmissions />,
           },
         ],
       },

@@ -454,6 +454,179 @@ class AuthService {
       };
     }
   }
+
+  async getDeveloperById(developerUid: string) {
+    try {
+      const userDocRef = doc(db, COLLECTIONS.USERS, developerUid);
+      const userSnap = await getDoc(userDocRef);
+
+      if (!userSnap.exists()) {
+        return {
+          success: false,
+          error: "Developer not found",
+        };
+      }
+
+      const userData = userSnap.data() as UserData;
+
+      // Verify that this user is actually a developer
+      if (userData.role !== "DEVELOPER") {
+        return {
+          success: false,
+          error: "User is not a developer",
+        };
+      }
+
+      return {
+        success: true,
+        developer: {
+          id: userSnap.id,
+          ...userData,
+        },
+      };
+    } catch (error: any) {
+      console.error("Error fetching developer details:", error);
+      return {
+        success: false,
+        error: error.message,
+      };
+    }
+  }
+
+  // async getSubmissionsForCompany(companyUid: string) {
+  //   try {
+  //     const companyBountiesResult = await this.getBountiesByCompanyId(
+  //       companyUid
+  //     );
+
+  //     if (!companyBountiesResult.success || !companyBountiesResult.bounties) {
+  //       return {
+  //         success: false,
+  //         error: "Failed to fetch company bounties",
+  //       };
+  //     }
+
+  //     const bountyIds = companyBountiesResult.bounties.map(
+  //       (bounty) => bounty.id
+  //     );
+
+  //     if (bountyIds.length === 0) {
+  //       return {
+  //         success: true,
+  //         submissions: [],
+  //       };
+  //     }
+
+  //     const submissionsQuery = query(
+  //       collection(db, COLLECTIONS.SUBMISSIONS),
+  //       where("bountyId", "in", bountyIds)
+  //     );
+
+  //     const querySnapshot = await getDocs(submissionsQuery);
+
+  //     const submissionsWithDetails = await Promise.all(
+  //       querySnapshot.docs.map(async (doc) => {
+  //         const submissionData = doc.data();
+
+  //         const bountyResult = await this.getBountyById(
+  //           submissionData.bountyId
+  //         );
+
+  //         const developerResult = await this.getCompanyById(
+  //           submissionData.developerUid
+  //         );
+
+  //         return {
+  //           id: doc.id,
+  //           ...submissionData,
+  //           bountyDetails: bountyResult.success ? bountyResult.bounty : null,
+  //           developerDetails: developerResult?.success
+  //             ? developerResult.company
+  //             : null,
+  //         };
+  //       })
+  //     );
+
+  //     return {
+  //       success: true,
+  //       submissions: submissionsWithDetails,
+  //     };
+  //   } catch (error: any) {
+  //     console.error("Error fetching company submissions:", error);
+  //     return {
+  //       success: false,
+  //       error: error.message,
+  //     };
+  //   }
+  // }
+
+  async getSubmissionsForCompany(companyUid: string) {
+    try {
+      const companyBountiesResult = await this.getBountiesByCompanyId(
+        companyUid
+      );
+
+      if (!companyBountiesResult.success || !companyBountiesResult.bounties) {
+        return {
+          success: false,
+          error: "Failed to fetch company bounties",
+        };
+      }
+
+      const bountyIds = companyBountiesResult.bounties.map(
+        (bounty) => bounty.id
+      );
+
+      if (bountyIds.length === 0) {
+        return {
+          success: true,
+          submissions: [],
+        };
+      }
+
+      const submissionsQuery = query(
+        collection(db, COLLECTIONS.SUBMISSIONS),
+        where("bountyId", "in", bountyIds)
+      );
+
+      const querySnapshot = await getDocs(submissionsQuery);
+
+      const submissionsWithDetails = await Promise.all(
+        querySnapshot.docs.map(async (doc) => {
+          const submissionData = doc.data();
+
+          const bountyResult = await this.getBountyById(
+            submissionData.bountyId
+          );
+
+          // FIX: Use getDeveloperById instead of getCompanyById
+          const developerResult = await this.getDeveloperById(
+            submissionData.developerUid
+          );
+
+          return {
+            id: doc.id,
+            ...submissionData,
+            bountyDetails: bountyResult.success ? bountyResult.bounty : null,
+            developerDetails: developerResult.success
+              ? developerResult.developer
+              : null,
+          };
+        })
+      );
+
+      return {
+        success: true,
+        submissions: submissionsWithDetails,
+      };
+    } catch (error: any) {
+      console.error("Error fetching company submissions:", error);
+      return {
+        success: false,
+        error: error.message,
+      };
+    }
+  }
 }
 
 export const authService = new AuthService();

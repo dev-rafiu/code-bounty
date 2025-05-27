@@ -17,7 +17,6 @@ export const CreateBountyPage = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const { user } = useAppContext();
-  console.log(user);
 
   const handleChange = (
     e: React.ChangeEvent<
