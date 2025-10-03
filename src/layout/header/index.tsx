@@ -1,4 +1,4 @@
-import { Bitcoin, Menu, X, Building2, Code } from "lucide-react";
+import { Menu, X, Building2, Code } from "lucide-react";
 import { useAppContext } from "../../hooks/useAppContext";
 import { useState } from "react";
 
@@ -52,7 +52,6 @@ export const Header = () => {
     }
   }, [user]);
 
-  // Role indicator component
   const RoleIndicator = ({ mobile = false }) => {
     if (!user?.success) return null;
 
@@ -63,18 +62,14 @@ export const Header = () => {
 
     return (
       <div
-        className={`flex items-center gap-1 ${mobile ? "text-xs" : "text-xs"}`}
+        className={`flex items-center gap-1 ${
+          mobile ? "text-xs lg:hidden" : "text-xs"
+        }`}
       >
         {isCompany ? (
-          <>
-            <Building2 className="w-3 h-3 text-blue-500" />
-            <span className="text-blue-600 font-medium">Company</span>
-          </>
+          <Building2 className="size-7 text-blue-500" />
         ) : (
-          <>
-            <Code className="w-3 h-3 text-green-500" />
-            <span className="text-green-600 font-medium">Developer</span>
-          </>
+          <Code className="size-7 text-green-500" />
         )}
       </div>
     );
@@ -155,9 +150,11 @@ export const Header = () => {
         <Link
           to="/transactions"
           onClick={onLinkClick}
-          className={`text-sm font-medium text-gray-700 hover:text-orange-600 transition-colors ${
-            mobile ? "block py-2" : ""
-          }`}
+          className={`text-sm font-medium transition-colors ${
+            location.pathname === "/transactions"
+              ? "text-orange-600"
+              : "text-gray-700 hover:text-orange-600"
+          } ${mobile ? "block py-2" : ""}`}
         >
           Transactions
         </Link>
@@ -169,11 +166,10 @@ export const Header = () => {
     <>
       <header className="bg-white shadow-sm border-b relative z-50">
         <div className="flex justify-between items-center h-16 px-4">
-          {/* Logo */}
-          <div className="flex items-center">
-            <Bitcoin className="w-8 h-8 text-orange-500 mr-2" />
-            <span className="text-xl font-bold text-gray-900">CodeBounty</span>
-          </div>
+          {/* logo */}
+          <span className="text-xl font-bold text-gray-900 block">
+            CodeBounty
+          </span>
 
           {/* Desktop Navigation */}
           {user && (
@@ -181,6 +177,8 @@ export const Header = () => {
               <NavigationLinks />
             </nav>
           )}
+
+          <RoleIndicator mobile />
 
           {/* Right side - Auth/User */}
           <div className="flex items-center gap-4">
@@ -202,9 +200,7 @@ export const Header = () => {
               </div>
             ) : (
               <>
-                {/* Desktop User Menu */}
                 <div className="hidden md:block">
-                  {/* Role indicator for desktop */}
                   <div className="flex items-center gap-3">
                     <RoleIndicator />
                     <DropdownMenu>
@@ -230,15 +226,11 @@ export const Header = () => {
 
                 {/* Mobile Menu Button */}
                 <div className="md:hidden flex items-center gap-3">
-                  <div className="flex flex-col items-center gap-1">
-                    <Avatar className="size-[35px] bg-slate-950 text-slate-50">
-                      <AvatarFallback className="bg-transparent text-sm">
-                        {name && name[0].toUpperCase()}
-                      </AvatarFallback>
-                    </Avatar>
-                    {/* Role indicator for mobile */}
-                    <RoleIndicator mobile />
-                  </div>
+                  <Avatar className="size-[35px] bg-slate-950 text-slate-50 hidden">
+                    <AvatarFallback className="bg-transparent text-sm">
+                      {name && name[0].toUpperCase()}
+                    </AvatarFallback>
+                  </Avatar>
 
                   <button
                     onClick={toggleMobileMenu}

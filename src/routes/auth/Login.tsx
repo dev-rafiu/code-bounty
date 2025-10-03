@@ -10,19 +10,43 @@ export const LoginPage = () => {
   const [loginForm, setLoginForm] = useState({
     email: "",
     password: "",
-    role: "developer",
+    role: "",
   });
+  const [emailError, setEmailError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const navigate = useNavigate();
 
   const { setUser, user } = useAppContext();
 
+  const validateEmail = (email: string): boolean => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const email = e.target.value;
+    setLoginForm({ ...loginForm, email });
+
+    if (email === "") {
+      setEmailError("");
+    } else if (!validateEmail(email)) {
+      setEmailError("Please enter a valid email address");
+    } else {
+      setEmailError("");
+    }
+  };
+
   const handleLogin = async (e: FormEvent) => {
     e.preventDefault();
 
     if (!loginForm.password || !loginForm.email) {
       toast.error("Please add email and password");
+      return;
+    }
+
+    if (!validateEmail(loginForm.email)) {
+      toast.error("Please enter a valid email address");
       return;
     }
 
@@ -47,7 +71,7 @@ export const LoginPage = () => {
         toast.error(user.error);
       }
     } catch (err: any) {
-      toast.success("Login unsuccessful");
+      toast.error("Login unsuccessful");
     } finally {
       setIsLoading(false);
     }
@@ -84,13 +108,18 @@ export const LoginPage = () => {
                   type="email"
                   required
                   value={loginForm.email}
-                  onChange={(e) =>
-                    setLoginForm({ ...loginForm, email: e.target.value })
-                  }
-                  className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                  onChange={handleEmailChange}
+                  className={`w-full pl-10 pr-3 py-2 border rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 ${
+                    emailError
+                      ? "border-red-500 focus:ring-red-500 focus:border-red-500"
+                      : "border-gray-300"
+                  }`}
                   placeholder="your@email.com"
                 />
               </div>
+              {emailError && (
+                <p className="mt-1 text-sm text-red-600">{emailError}</p>
+              )}
             </div>
 
             {/* password */}
@@ -135,7 +164,12 @@ export const LoginPage = () => {
 
           <button
             type="submit"
-            className="w-full bg-orange-500 text-white py-2 px-4 rounded-lg hover:bg-orange-600 transition-colors font-medium"
+            disabled={isLoading || !!emailError}
+            className={`w-full py-2 px-4 rounded-lg font-medium transition-colors ${
+              isLoading || emailError
+                ? "bg-gray-400 text-gray-600 cursor-not-allowed"
+                : "bg-orange-500 text-white hover:bg-orange-600"
+            }`}
           >
             {isLoading ? <LoadingIndicator /> : "Sign in"}
           </button>

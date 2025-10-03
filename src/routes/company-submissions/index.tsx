@@ -14,6 +14,30 @@ function CompanySubmissions() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  const getStatusIcon = (status: string) => {
+    switch (status) {
+      case "approved":
+        return <CheckCircle className="w-5 h-5 text-green-500" />;
+      case "rejected":
+        return <XCircle className="w-5 h-5 text-red-500" />;
+      case "pending":
+      default:
+        return <Clock className="w-5 h-5 text-yellow-500" />;
+    }
+  };
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case "approved":
+        return "bg-green-100 text-green-800 border-green-200";
+      case "rejected":
+        return "bg-red-100 text-red-800 border-red-200";
+      case "pending":
+      default:
+        return "bg-yellow-100 text-yellow-800 border-yellow-200";
+    }
+  };
+
   useEffect(() => {
     const fetchSubmissions = async () => {
       try {
@@ -55,30 +79,6 @@ function CompanySubmissions() {
 
     fetchSubmissions();
   }, []);
-
-  const getStatusIcon = (status: string) => {
-    switch (status) {
-      case "approved":
-        return <CheckCircle className="w-5 h-5 text-green-500" />;
-      case "rejected":
-        return <XCircle className="w-5 h-5 text-red-500" />;
-      case "pending":
-      default:
-        return <Clock className="w-5 h-5 text-yellow-500" />;
-    }
-  };
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "approved":
-        return "bg-green-100 text-green-800 border-green-200";
-      case "rejected":
-        return "bg-red-100 text-red-800 border-red-200";
-      case "pending":
-      default:
-        return "bg-yellow-100 text-yellow-800 border-yellow-200";
-    }
-  };
 
   if (loading) {
     return (
