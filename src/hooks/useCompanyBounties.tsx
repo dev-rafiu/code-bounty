@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { authService } from "../services/authService";
+import { bountyService } from "../services/bounties/bountyService";
 
 export interface Bounty {
   id: string;
@@ -14,7 +14,7 @@ export interface Bounty {
 
 export function useGetCompanyBounties(
   uid: string | undefined,
-  user: { success: boolean } | null
+  user: { success: boolean } | null,
 ) {
   return useQuery<Bounty[], Error>({
     queryKey: ["companyBounties", uid],
@@ -23,7 +23,9 @@ export function useGetCompanyBounties(
         throw new Error("User not authenticated");
       }
 
-      const response = await authService.getBountiesByCompanyId(uid as string);
+      const response = await bountyService.getBountiesByCompanyId(
+        uid as string,
+      );
 
       if (response.success && response.bounties) {
         return response.bounties.map((bounty: any) => ({

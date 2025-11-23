@@ -1,4 +1,4 @@
-import { Menu, X, Building2, Code } from "lucide-react";
+import { Menu } from "lucide-react";
 import { useAppContext } from "../../hooks/useAppContext";
 import { useState } from "react";
 
@@ -9,19 +9,38 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../../components/ui/dropdown-menu";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "../../components/ui/sheet";
 
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { authService } from "../../services/authService";
+import { Link, useNavigate } from "react-router-dom";
+import { authService } from "../../services/auth/authService";
 import { toast } from "sonner";
 import { useEffect } from "react";
+import { RoleIndicator } from "./components/RoleIndicator";
+import { NavigationLinks } from "./components/NavigationLinks";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "../../components/ui/alert-dialog";
 
 export const Header = () => {
   const [name, setName] = useState("");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  const { user, setUser } = useAppContext();
   const navigate = useNavigate();
-  const location = useLocation();
+  const { user, setUser } = useAppContext();
 
   const handleLogout = async () => {
     try {
@@ -33,17 +52,10 @@ export const Header = () => {
 
       setUser(null);
       navigate("/");
+      setIsMobileMenuOpen(false);
     } catch (error) {
       console.error("Logout failed:", error);
     }
-  };
-
-  const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
-  };
-
-  const closeMobileMenu = () => {
-    setIsMobileMenuOpen(false);
   };
 
   useEffect(() => {
@@ -52,234 +64,175 @@ export const Header = () => {
     }
   }, [user]);
 
-  const RoleIndicator = ({ mobile = false }) => {
-    if (!user?.success) return null;
-
-    const isCompany = user.user.role === "COMPANY";
-    const isDeveloper = user.user.role === "DEVELOPER";
-
-    if (!isCompany && !isDeveloper) return null;
-
-    return (
-      <div
-        className={`flex items-center gap-1 ${
-          mobile ? "text-xs lg:hidden" : "text-xs"
-        }`}
-      >
-        {isCompany ? (
-          <Building2 className="size-7 text-blue-500" />
-        ) : (
-          <Code className="size-7 text-green-500" />
-        )}
-      </div>
-    );
-  };
-
-  const NavigationLinks = ({ mobile = false, onLinkClick = () => {} }) => (
-    <ul
-      className={`flex ${mobile ? "flex-col space-y-4" : "items-center gap-6"}`}
-    >
-      {user?.success && user.user.role === "COMPANY" ? (
-        <>
-          <li>
-            <Link
-              to="/company-bounties/create"
-              onClick={onLinkClick}
-              className={`text-sm font-medium transition-colors ${
-                location.pathname === "/create-bounty"
-                  ? "text-orange-600"
-                  : "text-gray-700 hover:text-orange-600"
-              } ${mobile ? "block py-2" : ""}`}
-            >
-              Create Bounty
-            </Link>
-          </li>
-
-          <li>
-            <Link
-              to="/company-bounties"
-              onClick={onLinkClick}
-              className={`text-sm font-medium transition-colors ${
-                location.pathname === "/company-bounties"
-                  ? "text-orange-600"
-                  : "text-gray-700 hover:text-orange-600"
-              } ${mobile ? "block py-2" : ""}`}
-            >
-              Bounties
-            </Link>
-          </li>
-        </>
-      ) : (
-        <>
-          <li>
-            <Link
-              to="/dev-bounties"
-              onClick={onLinkClick}
-              className={`text-sm font-medium transition-colors ${
-                location.pathname === "/dev-bounties"
-                  ? "text-orange-600"
-                  : "text-gray-700 hover:text-orange-600"
-              } ${mobile ? "block py-2" : ""}`}
-            >
-              Bounties
-            </Link>
-          </li>
-        </>
-      )}
-
-      <li>
-        <Link
-          to={
-            user?.success && user.user.role == "DEVELOPER"
-              ? "/submissions"
-              : "/company-submissions"
-          }
-          onClick={onLinkClick}
-          className={`text-sm font-medium transition-colors ${
-            location.pathname === "/submissions" ||
-            location.pathname === "/company-submissions"
-              ? "text-orange-600"
-              : "text-gray-700 hover:text-orange-600"
-          } ${mobile ? "block py-2" : ""}`}
-        >
-          Submissions
-        </Link>
-      </li>
-
-      <li>
-        <Link
-          to="/transactions"
-          onClick={onLinkClick}
-          className={`text-sm font-medium transition-colors ${
-            location.pathname === "/transactions"
-              ? "text-orange-600"
-              : "text-gray-700 hover:text-orange-600"
-          } ${mobile ? "block py-2" : ""}`}
-        >
-          Transactions
-        </Link>
-      </li>
-    </ul>
-  );
-
   return (
-    <>
-      <header className="bg-white shadow-sm border-b relative z-50">
-        <div className="flex justify-between items-center h-16 px-4">
-          {/* logo */}
-          <span className="text-xl font-bold text-gray-900 block">
-            CodeBounty
-          </span>
+    <header className="relative z-50">
+      <div className="flex h-16 items-center justify-between px-4">
+        {/* logo */}
+        <Link
+          to="/"
+          className="text-primary hover:text-primary-hover block text-xl font-bold transition-colors"
+        >
+          CB
+        </Link>
 
-          {/* Desktop Navigation */}
-          {user && (
-            <nav className="hidden md:block">
-              <NavigationLinks />
-            </nav>
-          )}
+        {/* desktop navigation */}
+        {user && (
+          <nav className="hidden md:block">
+            <NavigationLinks />
+          </nav>
+        )}
 
-          <RoleIndicator mobile />
+        <RoleIndicator mobile />
 
-          {/* Right side - Auth/User */}
-          <div className="flex items-center gap-4">
-            {!user ? (
-              <div className="flex items-center gap-2 sm:gap-4">
-                <Link
-                  to="/login"
-                  className="text-orange-500 px-2 sm:px-4 py-2 hover:text-orange-600 transition-colors text-sm sm:text-base"
-                >
-                  Login
-                </Link>
+        {/* right side - auth/user */}
+        <div className="flex items-center gap-4">
+          {!user ? (
+            <div className="flex items-center gap-2 sm:gap-4">
+              <Link
+                to="/login"
+                className="text-primary hover:text-primary-hover px-2 py-2 text-sm transition-colors sm:px-4 sm:text-base"
+              >
+                Login
+              </Link>
 
-                <Link
-                  to="/sign-up"
-                  className="bg-orange-500 text-white px-3 sm:px-6 py-2 rounded-sm hover:bg-orange-600 transition-colors text-sm sm:text-base"
-                >
-                  Signup
-                </Link>
-              </div>
-            ) : (
-              <>
-                <div className="hidden md:block">
-                  <div className="flex items-center gap-3">
-                    <RoleIndicator />
-                    <DropdownMenu>
-                      <DropdownMenuTrigger
-                        asChild
-                        className="flex cursor-pointer items-center gap-5"
-                      >
-                        <Avatar className="size-[43px] bg-slate-950 text-slate-50">
-                          <AvatarFallback className="bg-transparent">
-                            {name && name[0].toUpperCase()}
-                          </AvatarFallback>
-                        </Avatar>
-                      </DropdownMenuTrigger>
+              <Link
+                to="/sign-up"
+                className="bg-primary text-primary-foreground hover:bg-primary-hover rounded-sm px-3 py-2 text-sm transition-colors sm:px-6 sm:text-base"
+              >
+                Signup
+              </Link>
+            </div>
+          ) : (
+            <>
+              <div className="hidden md:block">
+                <div className="flex items-center gap-3">
+                  <RoleIndicator />
 
-                      <DropdownMenuContent>
-                        <DropdownMenuItem onClick={handleLogout}>
-                          Logout
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </div>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger
+                      asChild
+                      className="flex cursor-pointer items-center gap-5"
+                    >
+                      <Avatar className="size-[43px] bg-slate-950 text-slate-50">
+                        <AvatarFallback className="bg-transparent">
+                          {name && name[0].toUpperCase()}
+                        </AvatarFallback>
+                      </Avatar>
+                    </DropdownMenuTrigger>
+
+                    <DropdownMenuContent>
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                          <DropdownMenuItem
+                            onSelect={(e) => e.preventDefault()}
+                          >
+                            Logout
+                          </DropdownMenuItem>
+                        </AlertDialogTrigger>
+
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+
+                            <AlertDialogDescription>
+                              You will be logged out of your account. You can
+                              sign in again at any time.
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+
+                            <AlertDialogAction
+                              onClick={handleLogout}
+                              className="bg-destructive text-white"
+                            >
+                              Logout
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 </div>
+              </div>
 
-                {/* Mobile Menu Button */}
-                <div className="md:hidden flex items-center gap-3">
-                  <Avatar className="size-[35px] bg-slate-950 text-slate-50 hidden">
-                    <AvatarFallback className="bg-transparent text-sm">
-                      {name && name[0].toUpperCase()}
-                    </AvatarFallback>
-                  </Avatar>
+              {/* mobile menu button */}
+              <div className="flex items-center gap-3 md:hidden">
+                <Avatar className="hidden size-[35px] bg-slate-950 text-slate-50">
+                  <AvatarFallback className="bg-transparent text-sm">
+                    {name && name[0].toUpperCase()}
+                  </AvatarFallback>
+                </Avatar>
 
-                  <button
-                    onClick={toggleMobileMenu}
-                    className="p-2 text-gray-600 hover:text-gray-900 focus:outline-none"
-                    aria-label="Toggle menu"
+                <Sheet
+                  open={isMobileMenuOpen}
+                  onOpenChange={setIsMobileMenuOpen}
+                >
+                  <SheetTrigger asChild>
+                    <button
+                      className="p-2 text-gray-600 hover:text-gray-900 focus:outline-none"
+                      aria-label="Toggle menu"
+                    >
+                      <Menu className="h-6 w-6" />
+                    </button>
+                  </SheetTrigger>
+
+                  <SheetContent
+                    side="left"
+                    className="w-[300px] sm:w-[350px]"
+                    aria-describedby={undefined}
                   >
-                    {isMobileMenuOpen ? (
-                      <X className="w-6 h-6" />
-                    ) : (
-                      <Menu className="w-6 h-6" />
-                    )}
-                  </button>
-                </div>
-              </>
-            )}
-          </div>
-        </div>
-      </header>
+                    <SheetHeader className="hidden">
+                      <SheetTitle></SheetTitle>
+                    </SheetHeader>
 
-      {/* Mobile Menu Overlay */}
-      {user && isMobileMenuOpen && (
-        <>
-          {/* Backdrop */}
-          <div
-            className="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden"
-            onClick={closeMobileMenu}
-          />
+                    <div className="mt-10 flex h-full flex-col">
+                      <nav className="flex-1 p-6">
+                        <NavigationLinks
+                          mobile={true}
+                          onLinkClick={() => setIsMobileMenuOpen(false)}
+                        />
+                      </nav>
 
-          {/* Mobile Menu */}
-          <div className="fixed top-16 left-0 right-0 bg-white border-b shadow-lg z-40 md:hidden">
-            <nav className="px-4 py-6">
-              <NavigationLinks mobile={true} onLinkClick={closeMobileMenu} />
+                      {/* mobile logout button */}
+                      <div className="border-t border-gray-200 p-4">
+                        <AlertDialog>
+                          <AlertDialogTrigger asChild>
+                            <button className="text-sm font-medium text-red-600 transition-colors hover:text-red-700">
+                              Logout
+                            </button>
+                          </AlertDialogTrigger>
 
-              {/* Mobile Logout Button */}
-              <div className="mt-6 pt-4 border-t border-gray-200">
-                <button
-                  onClick={() => {
-                    handleLogout();
-                    closeMobileMenu();
-                  }}
-                  className="text-red-600 font-medium text-sm hover:text-red-700 transition-colors"
-                >
-                  Logout
-                </button>
+                          <AlertDialogContent className="">
+                            <AlertDialogHeader>
+                              <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                              <AlertDialogDescription>
+                                You will be logged out of your account. You can
+                                sign in again at any time.
+                              </AlertDialogDescription>
+                            </AlertDialogHeader>
+
+                            <AlertDialogFooter>
+                              <AlertDialogCancel>Cancel</AlertDialogCancel>
+                              <AlertDialogAction
+                                onClick={handleLogout}
+                                className="bg-destructive text-white"
+                              >
+                                Logout
+                              </AlertDialogAction>
+                            </AlertDialogFooter>
+                          </AlertDialogContent>
+                        </AlertDialog>
+                      </div>
+                    </div>
+                  </SheetContent>
+                </Sheet>
               </div>
-            </nav>
-          </div>
-        </>
-      )}
-    </>
+            </>
+          )}
+        </div>
+      </div>
+    </header>
   );
 };

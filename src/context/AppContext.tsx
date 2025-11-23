@@ -2,9 +2,9 @@ import { createContext, useState, useEffect, type ReactNode } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 
-import type { AppContextType, TBounty } from "../definitions";
-import type { AuthResponse, UserData } from "../definitions/auth";
-import { auth, db } from "../firebase";
+import type { AppContextType, TBounty } from "../types";
+import type { AuthResponse, UserData } from "../types/auth";
+import { auth, db } from "../config/firebase";
 
 export const AppContext = createContext<AppContextType | undefined>(undefined);
 
@@ -12,12 +12,14 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   const [currentView, setCurrentView] = useState("home");
   const [user, setUser] = useState<AuthResponse | null>(null);
   const [selectedBounty, setSelectedBounty] = useState<TBounty | null>(null);
+  const [isAuthLoading, setIsAuthLoading] = useState(true);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
         try {
           const userDoc = await getDoc(doc(db, "users", firebaseUser.uid));
+
           if (userDoc.exists()) {
             const userData = userDoc.data() as UserData;
             setUser({
@@ -34,6 +36,8 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
       } else {
         setUser(null);
       }
+
+      setIsAuthLoading(false);
     });
 
     return () => unsubscribe();
@@ -48,6 +52,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         setUser,
         selectedBounty,
         setSelectedBounty,
+        isAuthLoading,
       }}
     >
       {children}
