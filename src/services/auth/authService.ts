@@ -16,7 +16,7 @@ import type {
   SignInPayload,
   SignUpPayload,
   UserData,
-} from "../../types/auth";
+} from "../../features/auth/types";
 import { toast } from "sonner";
 
 class AuthService {

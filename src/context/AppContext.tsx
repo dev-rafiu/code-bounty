@@ -2,8 +2,9 @@ import { createContext, useState, useEffect, type ReactNode } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 
-import type { AppContextType, TBounty } from "../types";
-import type { AuthResponse, UserData } from "../types/auth";
+import type { AppContextType } from "./types";
+import type { TBounty } from "../features/bounties/types";
+import type { AuthResponse, UserData } from "../features/auth/types";
 import { auth, db } from "../config/firebase";
 
 export const AppContext = createContext<AppContextType | undefined>(undefined);

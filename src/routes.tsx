@@ -1,16 +1,15 @@
 import { createBrowserRouter } from "react-router-dom";
-import { HomePage } from "./pages/home";
-import { LoginPage } from "./pages/auth/Login";
-import { SignUpPage } from "./pages/auth/SignUp";
-import { DevBountiesPage } from "./pages/dev-bounties";
-import { SubmitSolutionPage } from "./pages/submit";
 import { BaseLayout } from "./layout/BaseLayout";
-import { CreateBountyPage } from "./pages/company-bounties/create";
-import { CompanyBounties } from "./pages/company-bounties";
-
-import TransactionsPage from "./pages/transactions";
-import Submissions from "./pages/submissions";
-import CompanySubmissions from "./pages/company-submissions";
+import { HomePage } from "./features/home/pages/HomePage";
+import { LoginPage } from "./features/auth/pages/LoginPage";
+import { SignUpPage } from "./features/auth/pages/SignUpPage";
+import { CompanyBountiesPage } from "./features/bounties/pages/CompanyBountiesPage";
+import { CreateBountyPage } from "./features/bounties/pages/CreateBountyPage";
+import { DevBountiesPage } from "./features/bounties/pages/DevBountiesPage";
+import { CompanySubmissionsPage } from "./features/submissions/pages/CompanySubmissionsPage";
+import { DeveloperSubmissionsPage } from "./features/submissions/pages/DeveloperSubmissionsPage";
+import { SubmitSolutionPage } from "./features/submissions/pages/SubmitSolutionPage";
+import { TransactionsPage } from "./features/transactions/pages/TransactionsPage";
 
 export const router = createBrowserRouter([
   {
@@ -46,7 +45,7 @@ export const router = createBrowserRouter([
         children: [
           {
             index: true,
-            element: <CompanyBounties />,
+            element: <CompanyBountiesPage />,
           },
           { path: "create", element: <CreateBountyPage /> },
         ],
@@ -67,7 +66,7 @@ export const router = createBrowserRouter([
         children: [
           {
             index: true,
-            element: <Submissions />,
+            element: <DeveloperSubmissionsPage />,
           },
         ],
       },
@@ -77,7 +76,7 @@ export const router = createBrowserRouter([
         children: [
           {
             index: true,
-            element: <CompanySubmissions />,
+            element: <CompanySubmissionsPage />,
           },
         ],
       },

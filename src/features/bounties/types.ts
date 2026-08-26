@@ -11,3 +11,12 @@ export type TBounty = {
   status?: string;
   submissions?: number;
 };
+
+export type CreateBountyPayload = {
+  title: string;
+  description: string;
+  category: string;
+  difficulty: string;
+  bountyBTC: number;
+  deadline: string;
+};

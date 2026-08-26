@@ -1,54 +1,24 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { toast } from "sonner";
 import { submissionService } from "../../../services/submissions/submissionService";
-import { useAppContext } from "../../../hooks/useAppContext";
 
-export const useSubmitSolution = () => {
-  const navigate = useNavigate();
-  const { user } = useAppContext();
-  const [isSubmitting, setIsSubmitting] = useState(false);
+import { useMutation } from "@tanstack/react-query";
+import type { SubmitSolutionPayload } from "../types";
 
-  const submitSolution = async ({
+async function submitSolution({
+  bitcoinAddress,
+  bountyID,
+  githubUrl,
+}: SubmitSolutionPayload) {
+  const result = await submissionService.submitSolution({
     githubUrl,
     bitcoinAddress,
-    bountyId,
-  }: {
-    githubUrl: string;
-    bitcoinAddress: string;
-    bountyId: string;
-  }) => {
-    if (!user?.success) {
-      toast.error("You must be logged in to submit a solution");
-      return false;
-    }
+    bountyID,
+  });
 
-    setIsSubmitting(true);
+  return result;
+}
 
-    try {
-      const result = await submissionService.submitSolution({
-        githubUrl,
-        bitcoinAddress,
-        bountyId,
-      });
-
-      if (result.success) {
-        toast.success("Solution submitted successfully!");
-        navigate("/dev-bounties");
-        return true;
-      } else {
-        toast.error(result.error || "Failed to submit solution");
-        return false;
-      }
-    } catch (error) {
-      console.error("Submission error:", error);
-      toast.error("Something went wrong. Please try again.");
-      return false;
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  return { submitSolution, isSubmitting };
+export const useSubmitSolution = () => {
+  return useMutation({
+    mutationFn: submitSolution,
+  });
 };
-

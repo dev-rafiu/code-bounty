@@ -13,6 +13,7 @@ import {
   SelectValue,
 } from "../../../components/ui/select";
 import { useAuth } from "../hooks/useAuth";
+import { validateEmail } from "../utils/validateEmail";
 
 export const LoginForm = () => {
   const [loginForm, setLoginForm] = useState({
@@ -24,11 +25,6 @@ export const LoginForm = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   const { login, isLoading } = useAuth();
-
-  const validateEmail = (email: string): boolean => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const email = e.target.value;

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { authService } from "../../../services/auth/authService";
-import type { SignInPayload, SignUpPayload } from "../../../types/auth";
+import type { SignInPayload, SignUpPayload } from "../types";
 import { useAppContext } from "../../../hooks/useAppContext";
 
 export const useAuth = () => {

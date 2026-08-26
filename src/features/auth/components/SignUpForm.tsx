@@ -2,7 +2,6 @@ import { useState, type FormEvent } from "react";
 import { Mail, Lock, Eye, EyeOff } from "lucide-react";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
-import type { UserRole } from "../../../types/auth";
 import { Input } from "../../../components/ui/input";
 import { Button } from "../../../components/ui/button";
 import { Label } from "../../../components/ui/label";
@@ -14,6 +13,7 @@ import {
   SelectValue,
 } from "../../../components/ui/select";
 import { useAuth } from "../hooks/useAuth";
+import type { UserRole } from "../types";
 
 export const SignUpForm = () => {
   const [signupForm, setSignupForm] = useState({

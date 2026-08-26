@@ -1,37 +1,18 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { toast } from "sonner";
+import { useParams } from "react-router-dom";
 import { bountyService } from "../../../services/bounties/bountyService";
 import type { TBounty } from "../../bounties/types";
+import { useQuery } from "@tanstack/react-query";
 
-export const useBounty = (bountyId?: string) => {
-  const navigate = useNavigate();
-  const [bounty, setBounty] = useState<TBounty | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchBounty = async () => {
-      if (!bountyId) {
-        toast.error("No bounty ID provided");
-        navigate("/dev-bounties");
-        return;
-      }
-
-      setIsLoading(true);
-      const result = await bountyService.getBountyById(bountyId);
-
-      if (result.success && result.bounty) {
-        setBounty(result.bounty as TBounty);
-      } else {
-        toast.error(result.error || "Failed to fetch bounty");
-        navigate("/dev-bounties");
-      }
-      setIsLoading(false);
-    };
-
-    fetchBounty();
-  }, [bountyId, navigate]);
-
-  return { bounty, isLoading };
+const getBountyByID = async (bountyID: string) => {
+  const result = await bountyService.getBountyByID(bountyID);
+  return result.bounty as TBounty;
 };
 
+export const useGetBountyByID = () => {
+  const { bountyId } = useParams();
+
+  return useQuery({
+    queryKey: ["bounty", bountyId],
+    queryFn: () => getBountyByID(bountyId as string),
+  });
+};
