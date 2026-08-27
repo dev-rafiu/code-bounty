@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { Input } from "../../../components/ui/input";
 import { Button } from "../../../components/ui/button";
 import { Label } from "../../../components/ui/label";
+
 import {
   Select,
   SelectContent,
@@ -12,8 +13,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../../../components/ui/select";
-import { useAuth } from "../hooks/useAuth";
-import type { UserRole } from "../types";
+
+import { useSignUp } from "../hooks/useAuth";
+import type { SignUpPayload, UserRole } from "../types";
 
 export const SignUpForm = () => {
   const [signupForm, setSignupForm] = useState({
@@ -27,11 +29,11 @@ export const SignUpForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  const { signUp, isLoading } = useAuth();
+  const signUpMutation = useSignUp();
 
   const roleOptions: UserRole[] = ["DEVELOPER", "COMPANY"];
 
-  const handleSignUp = async (e: FormEvent) => {
+  const handleSignUp = (e: FormEvent) => {
     e.preventDefault();
 
     if (signupForm.password !== signupForm.confirmPassword) {
@@ -44,7 +46,7 @@ export const SignUpForm = () => {
       return;
     }
 
-    const payload: any = {
+    const payload: SignUpPayload = {
       email: signupForm.email,
       password: signupForm.password,
       role: signupForm.role as UserRole,
@@ -56,7 +58,7 @@ export const SignUpForm = () => {
       payload.companyName = signupForm.companyName;
     }
 
-    await signUp(payload);
+    signUpMutation.mutate(payload);
   };
 
   return (
@@ -70,7 +72,6 @@ export const SignUpForm = () => {
             <Input
               id="signup-email"
               type="email"
-              required
               value={signupForm.email}
               onChange={(e) =>
                 setSignupForm({ ...signupForm, email: e.target.value })
@@ -83,7 +84,7 @@ export const SignUpForm = () => {
 
         {/* role */}
         <div className="space-y-2">
-          <Label htmlFor="signup-role">I am a...</Label>
+          <Label htmlFor="signup-role">Role</Label>
           <Select
             value={signupForm.role}
             onValueChange={(value) =>
@@ -96,7 +97,8 @@ export const SignUpForm = () => {
             <SelectTrigger id="signup-role" className="w-full">
               <SelectValue placeholder="Select your role" />
             </SelectTrigger>
-            <SelectContent>
+
+            <SelectContent className="">
               {roleOptions.map((role) => (
                 <SelectItem key={role} value={role}>
                   {role.charAt(0) + role.slice(1).toLowerCase()}
@@ -112,7 +114,6 @@ export const SignUpForm = () => {
             <Input
               id="name"
               type="text"
-              required
               value={signupForm.name}
               onChange={(e) =>
                 setSignupForm({ ...signupForm, name: e.target.value })
@@ -207,8 +208,13 @@ export const SignUpForm = () => {
         </div>
       </div>
 
-      <Button type="submit" className="w-full" size="lg" disabled={isLoading}>
-        {isLoading ? "Creating account..." : "Create Account"}
+      <Button
+        type="submit"
+        className="w-full"
+        size="lg"
+        disabled={signUpMutation.isPending}
+      >
+        {signUpMutation.isPending ? "Creating account..." : "Create Account"}
       </Button>
 
       <div className="flex items-center justify-center gap-1 text-center text-sm">

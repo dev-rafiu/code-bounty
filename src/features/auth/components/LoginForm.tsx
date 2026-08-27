@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { Input } from "../../../components/ui/input";
 import { Button } from "../../../components/ui/button";
 import { Label } from "../../../components/ui/label";
+
 import {
   Select,
   SelectContent,
@@ -12,7 +13,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../../../components/ui/select";
-import { useAuth } from "../hooks/useAuth";
+
+import { useLogin } from "../hooks/useAuth";
 import { validateEmail } from "../utils/validateEmail";
 
 export const LoginForm = () => {
@@ -24,7 +26,7 @@ export const LoginForm = () => {
   const [emailError, setEmailError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-  const { login, isLoading } = useAuth();
+  const loginMutation = useLogin();
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const email = e.target.value;
@@ -39,7 +41,7 @@ export const LoginForm = () => {
     }
   };
 
-  const handleLogin = async (e: FormEvent) => {
+  const handleLogin = (e: FormEvent) => {
     e.preventDefault();
 
     if (!loginForm.password || !loginForm.email) {
@@ -52,10 +54,12 @@ export const LoginForm = () => {
       return;
     }
 
-    await login({
+    const payload = {
       email: loginForm.email,
       password: loginForm.password,
-    });
+    };
+
+    loginMutation.mutate(payload);
   };
 
   return (
@@ -69,7 +73,6 @@ export const LoginForm = () => {
             <Input
               id="email"
               type="email"
-              required
               value={loginForm.email}
               onChange={handleEmailChange}
               className={`pl-10 ${emailError ? "border-destructive" : ""}`}
@@ -90,7 +93,6 @@ export const LoginForm = () => {
             <Input
               id="password"
               type={showPassword ? "text" : "password"}
-              required
               value={loginForm.password}
               onChange={(e) =>
                 setLoginForm({ ...loginForm, password: e.target.value })
@@ -135,11 +137,11 @@ export const LoginForm = () => {
 
       <Button
         type="submit"
-        disabled={isLoading || !!emailError}
+        disabled={loginMutation.isPending || !!emailError}
         className="w-full cursor-pointer"
         size="lg"
       >
-        {isLoading ? "Signing in..." : "Sign in"}
+        {loginMutation.isPending ? "Signing in..." : "Sign in"}
       </Button>
 
       <div className="flex items-center justify-center gap-1 text-center text-sm">

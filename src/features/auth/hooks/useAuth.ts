@@ -1,65 +1,67 @@
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { authService } from "../../../services/auth/authService";
 import type { SignInPayload, SignUpPayload } from "../types";
-import { useAppContext } from "../../../hooks/useAppContext";
+import { useMutation } from "@tanstack/react-query";
 
-export const useAuth = () => {
+async function login(payload: SignInPayload) {
+  const user = await authService.signIn(payload);
+  return user;
+}
+
+export const useLogin = () => {
   const navigate = useNavigate();
-  const { setUser } = useAppContext();
-  const [isLoading, setIsLoading] = useState(false);
 
-  const login = async (payload: SignInPayload) => {
-    setIsLoading(true);
+  return useMutation({
+    mutationFn: login,
+    onSuccess: (data) => {
+      if (!data.success) {
+        toast.error(data.error);
+        return;
+      }
 
-    try {
-      const user = await authService.signIn(payload);
+      toast.success("Login successful");
 
-      if (user && user.success) {
-        setUser(user);
-        toast.success("Login successful");
-        const userRole = user.user.role;
-
-        if (userRole === "COMPANY") {
-          navigate("/company-bounties");
-        } else if (userRole === "DEVELOPER") {
-          navigate("/dev-bounties");
-        } else {
-          navigate("/");
-        }
+      if (data.user.role === "COMPANY") {
+        navigate("/company-bounties");
+      } else if (data.user.role === "DEVELOPER") {
+        navigate("/dev-bounties");
       } else {
-        toast.error(user.error);
+        navigate("/");
       }
-    } catch (err: any) {
-      toast.error("Login unsuccessful");
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    },
+    onError: (error: Error) => {
+      toast.error(error.message || "Login unsuccessful");
+    },
+  });
+};
 
-  const signUp = async (payload: SignUpPayload) => {
-    setIsLoading(true);
+async function signUp(payload: SignUpPayload) {
+  const user = await authService.signUp(payload);
+  return user;
+}
 
-    try {
-      const user = await authService.signUp(payload);
+export const useSignUp = () => {
+  const navigate = useNavigate();
 
-      if (user && user.success) {
-        setUser(user);
-        toast.success("Signup successful");
-
-        if (user.user.role === "COMPANY") {
-          navigate("/company-bounties");
-        } else {
-          navigate("/dev-bounties");
-        }
+  return useMutation({
+    mutationFn: signUp,
+    onSuccess: (data) => {
+      if (!data.success) {
+        toast.error(data.error);
+        return;
       }
-    } catch (err: any) {
-      toast.error(err.message || "Signup failed");
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
-  return { login, signUp, isLoading };
+      toast.success("Signup successful");
+
+      if (data.user.role === "COMPANY") {
+        navigate("/company-bounties");
+      } else {
+        navigate("/dev-bounties");
+      }
+    },
+    onError: (error: Error) => {
+      toast.error(error.message || "Signup failed");
+    },
+  });
 };

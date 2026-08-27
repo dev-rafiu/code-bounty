@@ -6,7 +6,10 @@
   ],
 
   "compilerOptions": {
-    "baseUrl": ".",
+    "types": ["jest", "@testing-library/jest-dom"],
+    "baseUrl": "./",
+    "jsx": "react-jsx",
+    "ignoreDeprecations": "6.0",
     "paths": {
       "@/*": ["./src/*"]
     }

@@ -44,7 +44,7 @@ export const Header = () => {
 
   const handleLogout = async () => {
     try {
-      await toast.promise(authService.signOut(), {
+      toast.promise(authService.signOut(), {
         loading: "Logging you out...",
         success: "Logged out successfully!",
         error: "Failed to log out.",

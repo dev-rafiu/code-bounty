@@ -9,7 +9,7 @@ import {
 import { doc, setDoc, getDoc, serverTimestamp } from "firebase/firestore";
 
 import { auth, db } from "../../config/firebase";
-import { COLLECTIONS, USER_ROLES } from "../firestore-structure";
+import { COLLECTIONS } from "../firestore-structure";
 
 import type {
   AuthResponse,
@@ -17,7 +17,6 @@ import type {
   SignUpPayload,
   UserData,
 } from "../../features/auth/types";
-import { toast } from "sonner";
 
 class AuthService {
   async signUp({
@@ -27,19 +26,16 @@ class AuthService {
     companyName,
     role,
   }: SignUpPayload): Promise<AuthResponse> {
-    let userCredential: any = null;
-
     try {
-      userCredential = await createUserWithEmailAndPassword(
+      const userCredential = await createUserWithEmailAndPassword(
         auth,
         email,
         password,
       );
-
       const user = userCredential.user;
 
       await updateProfile(user, {
-        displayName: role === USER_ROLES.COMPANY ? companyName : name,
+        displayName: role === "COMPANY" ? companyName : name,
       });
 
       const userData: UserData = {
@@ -58,14 +54,13 @@ class AuthService {
       // Create user document in Firestore
       try {
         await setDoc(doc(db, COLLECTIONS.USERS, user.uid), userData);
-      } catch (firestoreError: any) {
-        console.error("Error creating user document:", firestoreError);
-        // If Firestore write fails, delete the auth user to prevent orphaned accounts
-        // Note: This requires additional permissions, so we'll just log and continue
-        // The signIn method will handle creating the profile if it's missing
-        toast.error(
-          "Account created but profile setup incomplete. Please sign in to complete setup.",
-        );
+      } catch (createError: any) {
+        console.error("Error creating user document:", createError);
+        return {
+          success: false,
+          error:
+            "Account created but profile setup incomplete. Please sign in to complete setup.",
+        };
       }
 
       return {
@@ -95,7 +90,6 @@ class AuthService {
           "Permission denied. Please check your Firestore security rules.";
       }
 
-      toast.error(errorMessage);
       return {
         success: false,
         error: errorMessage,
@@ -134,7 +128,6 @@ class AuthService {
             },
           };
         } catch (createError: any) {
-          console.error("Error creating user profile:", createError);
           return {
             success: false,
             error:
@@ -155,8 +148,6 @@ class AuthService {
         },
       };
     } catch (error: any) {
-      console.error("Sign in error:", error);
-
       let errorMessage = error.message;
       if (error.code === "auth/user-not-found") {
         errorMessage =

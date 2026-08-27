@@ -1,0 +1,17 @@
+{
+  "extends": "./tsconfig.app.json",
+  "compilerOptions": {
+    "types": ["vite/client", "jest", "node", "@testing-library/jest-dom"],
+    "jsx": "react-jsx",
+
+    /* ts-jest emits CommonJS, which trips verbatimModuleSyntax on every import */
+    "verbatimModuleSyntax": false
+  },
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "src/**/*.test.ts",
+    "src/**/*.test.tsx",
+    "src/test/**/*.ts"
+  ]
+}
