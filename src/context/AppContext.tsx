@@ -1,16 +1,16 @@
-import { createContext, useState, useEffect, type ReactNode } from "react";
-import { onAuthStateChanged } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
+import { createContext, useState, useEffect, type ReactNode } from 'react';
+import { onAuthStateChanged } from 'firebase/auth';
+import { doc, getDoc } from 'firebase/firestore';
 
-import type { AppContextType } from "./types";
-import type { TBounty } from "../features/bounties/types";
-import type { AuthResponse, UserData } from "../features/auth/types";
-import { auth, db } from "../config/firebase";
+import type { AppContextType } from './types';
+import type { TBounty } from '../features/bounties/types';
+import type { AuthResponse, UserData } from '../features/auth/types';
+import { auth, db } from '../config/firebase';
 
 export const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export const AppProvider = ({ children }: { children: ReactNode }) => {
-  const [currentView, setCurrentView] = useState("home");
+  const [currentView, setCurrentView] = useState('home');
   const [user, setUser] = useState<AuthResponse | null>(null);
   const [selectedBounty, setSelectedBounty] = useState<TBounty | null>(null);
   const [isAuthLoading, setIsAuthLoading] = useState(true);
@@ -19,7 +19,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
         try {
-          const userDoc = await getDoc(doc(db, "users", firebaseUser.uid));
+          const userDoc = await getDoc(doc(db, 'users', firebaseUser.uid));
 
           if (userDoc.exists()) {
             const userData = userDoc.data() as UserData;
@@ -32,7 +32,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
             });
           }
         } catch (error) {
-          console.error("Error fetching user profile:", error);
+          console.error('Error fetching user profile:', error);
         }
       } else {
         setUser(null);

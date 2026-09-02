@@ -4,19 +4,19 @@ import {
   signOut,
   onAuthStateChanged,
   updateProfile,
-} from "firebase/auth";
+} from 'firebase/auth';
 
-import { doc, setDoc, getDoc, serverTimestamp } from "firebase/firestore";
+import { doc, setDoc, getDoc, serverTimestamp } from 'firebase/firestore';
 
-import { auth, db } from "../../config/firebase";
-import { COLLECTIONS } from "../firestore-structure";
+import { auth, db } from '../../config/firebase';
+import { COLLECTIONS } from '../firestore-structure';
 
 import type {
   AuthResponse,
   SignInPayload,
   SignUpPayload,
   UserData,
-} from "../../features/auth/types";
+} from '../../features/auth/types';
 
 class AuthService {
   async signUp({
@@ -35,7 +35,7 @@ class AuthService {
       const user = userCredential.user;
 
       await updateProfile(user, {
-        displayName: role === "COMPANY" ? companyName : name,
+        displayName: role === 'COMPANY' ? companyName : name,
       });
 
       const userData: UserData = {
@@ -45,9 +45,9 @@ class AuthService {
         createdAt: serverTimestamp(),
       };
 
-      if (role === "COMPANY") {
+      if (role === 'COMPANY') {
         userData.companyName = companyName;
-      } else if (role === "DEVELOPER") {
+      } else if (role === 'DEVELOPER') {
         userData.name = name;
       }
 
@@ -55,11 +55,11 @@ class AuthService {
       try {
         await setDoc(doc(db, COLLECTIONS.USERS, user.uid), userData);
       } catch (createError: any) {
-        console.error("Error creating user document:", createError);
+        console.error('Error creating user document:', createError);
         return {
           success: false,
           error:
-            "Account created but profile setup incomplete. Please sign in to complete setup.",
+            'Account created but profile setup incomplete. Please sign in to complete setup.',
         };
       }
 
@@ -74,20 +74,20 @@ class AuthService {
       let errorMessage = error.message;
 
       // Handle specific Firebase auth errors
-      if (error.code === "auth/email-already-in-use") {
+      if (error.code === 'auth/email-already-in-use') {
         errorMessage =
-          "An account with this email already exists. Please try signing in instead.";
-      } else if (error.code === "auth/weak-password") {
+          'An account with this email already exists. Please try signing in instead.';
+      } else if (error.code === 'auth/weak-password') {
         errorMessage =
-          "Password is too weak. Please choose a stronger password.";
-      } else if (error.code === "auth/invalid-email") {
-        errorMessage = "Please enter a valid email address.";
+          'Password is too weak. Please choose a stronger password.';
+      } else if (error.code === 'auth/invalid-email') {
+        errorMessage = 'Please enter a valid email address.';
       } else if (
-        error.code === "permission-denied" ||
-        error.message?.includes("permission")
+        error.code === 'permission-denied' ||
+        error.message?.includes('permission')
       ) {
         errorMessage =
-          "Permission denied. Please check your Firestore security rules.";
+          'Permission denied. Please check your Firestore security rules.';
       }
 
       return {
@@ -112,8 +112,8 @@ class AuthService {
         const basicUserData: UserData = {
           uid: user.uid,
           email: user.email!,
-          role: "DEVELOPER",
-          name: user.displayName || "User",
+          role: 'DEVELOPER',
+          name: user.displayName || 'User',
           createdAt: serverTimestamp(),
         };
 
@@ -131,7 +131,7 @@ class AuthService {
           return {
             success: false,
             error:
-              "Failed to create user profile. Please try signing up again.",
+              'Failed to create user profile. Please try signing up again.',
           };
         }
       }
@@ -149,15 +149,15 @@ class AuthService {
       };
     } catch (error: any) {
       let errorMessage = error.message;
-      if (error.code === "auth/user-not-found") {
+      if (error.code === 'auth/user-not-found') {
         errorMessage =
-          "No account found with this email. Please sign up first.";
-      } else if (error.code === "auth/wrong-password") {
-        errorMessage = "Incorrect password. Please try again.";
-      } else if (error.code === "auth/invalid-credential") {
-        errorMessage = "Invalid credentials";
-      } else if (error.code === "auth/too-many-requests") {
-        errorMessage = "Too many failed attempts. Please try again later.";
+          'No account found with this email. Please sign up first.';
+      } else if (error.code === 'auth/wrong-password') {
+        errorMessage = 'Incorrect password. Please try again.';
+      } else if (error.code === 'auth/invalid-credential') {
+        errorMessage = 'Invalid credentials';
+      } else if (error.code === 'auth/too-many-requests') {
+        errorMessage = 'Too many failed attempts. Please try again later.';
       }
 
       return {
@@ -199,7 +199,7 @@ class AuthService {
         displayName: user.displayName,
       };
     } catch (error) {
-      console.error("Get user data error:", error);
+      console.error('Get user data error:', error);
       return null;
     }
   }
@@ -221,11 +221,11 @@ class AuthService {
 
   async updateUserProfile(
     updates: Partial<
-      Omit<UserData, "uid" | "email" | "createdAt" | "stats">
+      Omit<UserData, 'uid' | 'email' | 'createdAt' | 'stats'>
     > & { displayName?: string },
   ): Promise<{ success: true } | { success: false; error: string }> {
     const user = auth.currentUser;
-    if (!user) throw new Error("No authenticated user");
+    if (!user) throw new Error('No authenticated user');
 
     try {
       await setDoc(
@@ -239,13 +239,13 @@ class AuthService {
 
       if (updates.name || updates.companyName) {
         await updateProfile(user, {
-          displayName: updates.companyName || updates.name || "",
+          displayName: updates.companyName || updates.name || '',
         });
       }
 
       return { success: true };
     } catch (error: any) {
-      console.error("Update profile error:", error);
+      console.error('Update profile error:', error);
       return {
         success: false,
         error: error.message,

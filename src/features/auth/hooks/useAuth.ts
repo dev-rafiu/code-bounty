@@ -1,8 +1,8 @@
-import { useNavigate } from "react-router-dom";
-import { toast } from "sonner";
-import { authService } from "../../../services/auth/authService";
-import type { SignInPayload, SignUpPayload } from "../types";
-import { useMutation } from "@tanstack/react-query";
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
+import { authService } from '../../../services/auth/authService';
+import type { SignInPayload, SignUpPayload } from '../types';
+import { useMutation } from '@tanstack/react-query';
 
 async function login(payload: SignInPayload) {
   const user = await authService.signIn(payload);
@@ -20,18 +20,18 @@ export const useLogin = () => {
         return;
       }
 
-      toast.success("Login successful");
+      toast.success('Login successful');
 
-      if (data.user.role === "COMPANY") {
-        navigate("/company-bounties");
-      } else if (data.user.role === "DEVELOPER") {
-        navigate("/dev-bounties");
+      if (data.user.role === 'COMPANY') {
+        navigate('/company-bounties');
+      } else if (data.user.role === 'DEVELOPER') {
+        navigate('/dev-bounties');
       } else {
-        navigate("/");
+        navigate('/');
       }
     },
     onError: (error: Error) => {
-      toast.error(error.message || "Login unsuccessful");
+      toast.error(error.message || 'Login unsuccessful');
     },
   });
 };
@@ -52,16 +52,16 @@ export const useSignUp = () => {
         return;
       }
 
-      toast.success("Signup successful");
+      toast.success('Signup successful');
 
-      if (data.user.role === "COMPANY") {
-        navigate("/company-bounties");
+      if (data.user.role === 'COMPANY') {
+        navigate('/company-bounties');
       } else {
-        navigate("/dev-bounties");
+        navigate('/dev-bounties');
       }
     },
     onError: (error: Error) => {
-      toast.error(error.message || "Signup failed");
+      toast.error(error.message || 'Signup failed');
     },
   });
 };

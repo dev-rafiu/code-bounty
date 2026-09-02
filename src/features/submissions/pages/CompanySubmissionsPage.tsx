@@ -1,19 +1,20 @@
-import { User, DollarSign, ExternalLink } from "lucide-react";
-import { useCompanySubmissions } from "../hooks/useCompanySubmissions";
-import { AccessDeniedState } from "../../../components/common/AccessDeniedState";
-import { LoadingState } from "../../../components/common/LoadingState";
-import { PageEmptyState } from "../../../components/common/PageEmptyState";
-import { PageErrorState } from "../../../components/common/PageErrorState";
+import { User, DollarSign, ExternalLink } from 'lucide-react';
+import { useCompanySubmissions } from '../hooks/useCompanySubmissions';
+import { AccessDeniedState } from '../../../components/common/AccessDeniedState';
+import { LoadingState } from '../../../components/common/LoadingState';
+import { PageEmptyState } from '../../../components/common/PageEmptyState';
+import { PageErrorState } from '../../../components/common/PageErrorState';
 import {
   getSubmissionStatusColor,
   getSubmissionStatusIcon,
-} from "../utils/submissionStatus";
+} from '../utils/submissionStatus';
 
 export function CompanySubmissionsPage() {
   const { submissions, loading, error, accessMessage } =
     useCompanySubmissions();
 
-  if (loading) return <LoadingState message="Loading submissions..." fullscreen={false} />;
+  if (loading)
+    return <LoadingState message="Loading submissions..." fullscreen={false} />;
   if (accessMessage) return <AccessDeniedState message={accessMessage} />;
   if (error) return <PageErrorState message={error} />;
   if (submissions.length === 0)
@@ -48,7 +49,7 @@ export function CompanySubmissionsPage() {
 
                 {submission.bountyDetails?.title && (
                   <p className="mt-1 text-sm text-gray-600">
-                    <span className="font-medium">Bounty:</span>{" "}
+                    <span className="font-medium">Bounty:</span>{' '}
                     {submission.bountyDetails.title}
                   </p>
                 )}
@@ -58,7 +59,7 @@ export function CompanySubmissionsPage() {
                 <div className="text-sm text-gray-400">
                   {submission.createdAt?.toDate
                     ? submission.createdAt.toDate().toLocaleDateString()
-                    : "Date not available"}
+                    : 'Date not available'}
                 </div>
 
                 {submission.status && (
@@ -86,7 +87,7 @@ export function CompanySubmissionsPage() {
                   <span className="ml-2 text-gray-900">
                     {submission.developerDetails.name ||
                       submission.developerDetails.email ||
-                      "Unknown Developer"}
+                      'Unknown Developer'}
                   </span>
 
                   {submission.developerDetails.email &&
@@ -137,7 +138,7 @@ export function CompanySubmissionsPage() {
               {submission.bountyDetails?.description && (
                 <div className="mt-4 border-t border-gray-100 pt-4">
                   <p className="text-sm text-gray-500">
-                    <span className="font-medium">Bounty Description:</span>{" "}
+                    <span className="font-medium">Bounty Description:</span>{' '}
                     {submission.bountyDetails.description}
                   </p>
                 </div>

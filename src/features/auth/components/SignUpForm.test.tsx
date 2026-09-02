@@ -1,21 +1,41 @@
-import { render, screen } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
-import { MemoryRouter } from "react-router-dom";
-import { beforeEach, describe, it, jest } from "@jest/globals";
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { MemoryRouter } from 'react-router-dom';
+import { beforeEach, describe, it, jest } from '@jest/globals';
 
-import { useSignUp } from "../hooks/useAuth";
-import { SignUpForm } from "./SignUpForm";
+import { useSignUp } from '../hooks/useAuth';
+import { SignUpForm } from './SignUpForm';
 
 // mock useSignPp
-jest.mock("../hooks/useAuth", () => ({
+jest.mock('../hooks/useAuth', () => ({
   useSignUp: jest.fn(),
 }));
 
 // mock sonner
-jest.mock("sonner", () => ({
+jest.mock('sonner', () => ({
   toast: {
     error: jest.fn(),
   },
+}));
+
+// Replace Radix Select with plain HTML so tests don't need real layout/pointer APIs
+jest.mock('../../../components/ui/select', () => ({
+  Select: ({ children, onValueChange, value }: any) => (
+    <select
+      aria-label="Role"
+      value={value}
+      onChange={(e) => onValueChange(e.target.value)}
+    >
+      <option value="">Select your role</option>
+      {children}
+    </select>
+  ),
+  SelectTrigger: ({ children }: any) => <>{children}</>,
+  SelectValue: () => null,
+  SelectContent: ({ children }: any) => <>{children}</>,
+  SelectItem: ({ children, value }: any) => (
+    <option value={value}>{children}</option>
+  ),
 }));
 
 const mockMutate = jest.fn();
@@ -28,49 +48,54 @@ const renderSignUpForm = () => {
   );
 };
 
-describe("SignUp Form", () => {
+describe('SignUp Form', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-
     jest.mocked(useSignUp).mockReturnValue({
       mutate: mockMutate,
       isPending: false,
     } as unknown as ReturnType<typeof useSignUp>);
   });
 
-  it("renders the signup form", async () => {
-    const user = userEvent.setup();
-
+  it('renders the signup form', () => {
     renderSignUpForm();
 
     expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
-    // expect(screen.getByLabelText(/role/i)).toBeInTheDocument();
 
-    //  full name / company name
-    // if user selects developer role , full name field should be displayd else show conpany name field
-    const trigger = screen.getByRole("combobox", { name: /role/i });
-    expect(trigger).toHaveTextContent(/select your role/i);
+    expect(screen.getByRole('combobox', { name: /role/i })).toBeInTheDocument();
 
-    // user selects developer option
-    await user.click(trigger);
-    const developer = await screen.findByRole("option", { name: /developer/i });
-    await user.click(developer);
-    expect(trigger).toHaveTextContent(/developer/i);
-    expect(screen.getByLabelText(/full name/i)).toBeInTheDocument();
-
-    // user selects company option
-    await user.click(trigger);
-    const company = await screen.findByRole("option", { name: /company/i });
-    await user.click(company);
-    expect(trigger).toHaveTextContent(/company/i);
-    expect(screen.getByLabelText(/company name/i)).toBeInTheDocument();
+    expect(screen.getByRole('combobox', { name: /role/i })).toHaveTextContent(
+      /select your role/i,
+    );
 
     expect(screen.getByLabelText(/^password$/i)).toBeInTheDocument();
 
     expect(
-      screen.getByRole("button", { name: /create account/i }),
+      screen.getByRole('button', { name: /create account/i }),
     ).toBeInTheDocument();
 
-    expect(screen.getByRole("link", { name: /sign in/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /sign in/i })).toBeInTheDocument();
+  });
+
+  it('shows full name field when developer is selected', async () => {
+    renderSignUpForm();
+
+    const user = userEvent.setup();
+    const select = screen.getByRole('combobox', { name: /role/i });
+    await user.selectOptions(select, 'DEVELOPER');
+
+    expect(screen.getByLabelText(/full name/i)).toBeInTheDocument();
+    expect(screen.queryByLabelText(/company name/i)).not.toBeInTheDocument();
+  });
+
+  it('shows company name field when company is selected', async () => {
+    renderSignUpForm();
+
+    const user = userEvent.setup();
+    const select = screen.getByRole('combobox', { name: /role/i });
+    await user.selectOptions(select, 'COMPANY');
+
+    expect(screen.getByLabelText(/company name/i)).toBeInTheDocument();
+    expect(screen.queryByLabelText(/full name/i)).not.toBeInTheDocument();
   });
 });

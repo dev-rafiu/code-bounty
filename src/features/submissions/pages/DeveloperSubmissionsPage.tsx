@@ -1,12 +1,13 @@
-import { LoadingState } from "../../../components/common/LoadingState";
-import { PageEmptyState } from "../../../components/common/PageEmptyState";
-import { PageErrorState } from "../../../components/common/PageErrorState";
-import { useDeveloperSubmissions } from "../hooks/useDeveloperSubmissions";
+import { LoadingState } from '../../../components/common/LoadingState';
+import { PageEmptyState } from '../../../components/common/PageEmptyState';
+import { PageErrorState } from '../../../components/common/PageErrorState';
+import { useDeveloperSubmissions } from '../hooks/useDeveloperSubmissions';
 
 export function DeveloperSubmissionsPage() {
   const { submissions, loading, error } = useDeveloperSubmissions();
 
-  if (loading) return <LoadingState message="Loading submissions..." fullscreen={false} />;
+  if (loading)
+    return <LoadingState message="Loading submissions..." fullscreen={false} />;
   if (error) return <PageErrorState message={error} />;
   if (submissions.length === 0)
     return (
@@ -40,7 +41,7 @@ export function DeveloperSubmissionsPage() {
                 <p className="text-sm text-gray-400">
                   {submission.createdAt?.toDate
                     ? submission.createdAt.toDate().toLocaleDateString()
-                    : "Date not available"}
+                    : 'Date not available'}
                 </p>
               </div>
 

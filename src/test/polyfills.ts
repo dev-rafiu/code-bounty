@@ -1,3 +1,3 @@
-import { TextEncoder, TextDecoder } from "node:util";
+import { TextEncoder, TextDecoder } from 'node:util';
 
 Object.assign(globalThis, { TextEncoder, TextDecoder });

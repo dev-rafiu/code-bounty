@@ -1,22 +1,22 @@
-import { useState } from "react";
-import { useAppContext } from "../../../hooks/useAppContext";
-import { Link } from "react-router-dom";
+import { useState } from 'react';
+import { useAppContext } from '../../../hooks/useAppContext';
+import { Link } from 'react-router-dom';
 
-import { Bitcoin, Plus, Users } from "lucide-react";
-import { useGetCompanyBounties } from "../../../hooks/useCompanyBounties";
-import { Button } from "../../../components/ui/button";
+import { Bitcoin, Plus, Users } from 'lucide-react';
+import { useGetCompanyBounties } from '../../../hooks/useCompanyBounties';
+import { Button } from '../../../components/ui/button';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../../../components/ui/select";
-import { LoadingState } from "../../../components/common/LoadingState";
+} from '../../../components/ui/select';
+import { LoadingState } from '../../../components/common/LoadingState';
 
 export const CompanyBountiesPage = () => {
-  const [_category, setCategory] = useState<string>("all");
-  const [_difficulty, setDifficulty] = useState<string>("all");
+  const [_category, setCategory] = useState<string>('all');
+  const [_difficulty, setDifficulty] = useState<string>('all');
 
   const { user } = useAppContext();
 
@@ -27,10 +27,7 @@ export const CompanyBountiesPage = () => {
 
   if (!bounties || isBountiesPending) {
     return (
-      <LoadingState
-        message="Loading bounties..."
-        className="bg-gray-50"
-      />
+      <LoadingState message="Loading bounties..." className="bg-gray-50" />
     );
   }
 
@@ -98,11 +95,11 @@ export const CompanyBountiesPage = () => {
 
                   <span
                     className={`rounded-full px-3 py-1 text-sm font-medium ${
-                      bounty.difficulty === "beginner"
-                        ? "bg-green-100 text-green-800"
-                        : bounty.difficulty === "intermediate"
-                          ? "bg-yellow-100 text-yellow-800"
-                          : "bg-red-100 text-red-800"
+                      bounty.difficulty === 'beginner'
+                        ? 'bg-green-100 text-green-800'
+                        : bounty.difficulty === 'intermediate'
+                          ? 'bg-yellow-100 text-yellow-800'
+                          : 'bg-red-100 text-red-800'
                     }`}
                   >
                     {bounty.difficulty}

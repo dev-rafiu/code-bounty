@@ -1,97 +1,97 @@
-import { useState } from "react";
+import { useState } from 'react';
 import {
   Bitcoin,
   ArrowUpRight,
   CheckCircle,
   ExternalLink,
   Hash,
-} from "lucide-react";
+} from 'lucide-react';
 import {
   formatTimeAgo,
   formatTxHash,
   getTransactionStatusColor,
   getTransactionStatusIcon,
-} from "../utils/transactionUtils";
+} from '../utils/transactionUtils';
 
 const sampleTransactions = [
   {
-    id: "tx_001",
-    txHash: "1a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p7q8r9s0t1u2v3w4x5y6z",
+    id: 'tx_001',
+    txHash: '1a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p7q8r9s0t1u2v3w4x5y6z',
     amount: 0.025,
     usdValue: 1250,
-    status: "confirmed",
+    status: 'confirmed',
     timestamp: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
-    bountyTitle: "React Dashboard Implementation",
+    bountyTitle: 'React Dashboard Implementation',
     confirmations: 6,
   },
   {
-    id: "tx_002",
-    txHash: "9z8y7x6w5v4u3t2s1r0q9p8o7n6m5l4k3j2i1h0g9f8e7d6c5b4a",
+    id: 'tx_002',
+    txHash: '9z8y7x6w5v4u3t2s1r0q9p8o7n6m5l4k3j2i1h0g9f8e7d6c5b4a',
     amount: 0.05,
     usdValue: 2500,
-    status: "confirmed",
+    status: 'confirmed',
     timestamp: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
-    bountyTitle: "API Integration & Testing",
+    bountyTitle: 'API Integration & Testing',
     confirmations: 12,
   },
   {
-    id: "tx_003",
-    txHash: "5f4e3d2c1b0a9z8y7x6w5v4u3t2s1r0q9p8o7n6m5l4k3j2i1h0g",
+    id: 'tx_003',
+    txHash: '5f4e3d2c1b0a9z8y7x6w5v4u3t2s1r0q9p8o7n6m5l4k3j2i1h0g',
     amount: 0.0125,
     usdValue: 625,
-    status: "pending",
+    status: 'pending',
     timestamp: new Date(Date.now() - 30 * 60 * 1000),
-    bountyTitle: "Bug Fix - Authentication Module",
+    bountyTitle: 'Bug Fix - Authentication Module',
     confirmations: 0,
   },
   {
-    id: "tx_004",
-    txHash: "3g2f1e0d9c8b7a6z5y4x3w2v1u0t9s8r7q6p5o4n3m2l1k0j9i8h",
+    id: 'tx_004',
+    txHash: '3g2f1e0d9c8b7a6z5y4x3w2v1u0t9s8r7q6p5o4n3m2l1k0j9i8h',
     amount: 0.075,
     usdValue: 3750,
-    status: "confirmed",
+    status: 'confirmed',
     timestamp: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
-    bountyTitle: "Mobile App UI/UX Redesign",
+    bountyTitle: 'Mobile App UI/UX Redesign',
     confirmations: 25,
   },
   {
-    id: "tx_005",
-    txHash: "7h6g5f4e3d2c1b0a9z8y7x6w5v4u3t2s1r0q9p8o7n6m5l4k3j2i",
+    id: 'tx_005',
+    txHash: '7h6g5f4e3d2c1b0a9z8y7x6w5v4u3t2s1r0q9p8o7n6m5l4k3j2i',
     amount: 0.1,
     usdValue: 5000,
-    status: "confirmed",
+    status: 'confirmed',
     timestamp: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000),
-    bountyTitle: "Blockchain Integration Project",
+    bountyTitle: 'Blockchain Integration Project',
     confirmations: 45,
   },
   {
-    id: "tx_006",
-    txHash: "8i7h6g5f4e3d2c1b0a9z8y7x6w5v4u3t2s1r0q9p8o7n6m5l4k3j",
+    id: 'tx_006',
+    txHash: '8i7h6g5f4e3d2c1b0a9z8y7x6w5v4u3t2s1r0q9p8o7n6m5l4k3j',
     amount: 0.03,
     usdValue: 1500,
-    status: "confirmed",
+    status: 'confirmed',
     timestamp: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000),
-    bountyTitle: "Database Optimization",
+    bountyTitle: 'Database Optimization',
     confirmations: 78,
   },
   {
-    id: "tx_007",
-    txHash: "2j1i0h9g8f7e6d5c4b3a2z1y0x9w8v7u6t5s4r3q2p1o0n9m8l7k",
+    id: 'tx_007',
+    txHash: '2j1i0h9g8f7e6d5c4b3a2z1y0x9w8v7u6t5s4r3q2p1o0n9m8l7k',
     amount: 0.02,
     usdValue: 1000,
-    status: "confirmed",
+    status: 'confirmed',
     timestamp: new Date(Date.now() - 21 * 24 * 60 * 60 * 1000),
-    bountyTitle: "Security Audit Implementation",
+    bountyTitle: 'Security Audit Implementation',
     confirmations: 156,
   },
   {
-    id: "tx_008",
-    txHash: "4k3j2i1h0g9f8e7d6c5b4a3z2y1x0w9v8u7t6s5r4q3p2o1n0m9l",
+    id: 'tx_008',
+    txHash: '4k3j2i1h0g9f8e7d6c5b4a3z2y1x0w9v8u7t6s5r4q3p2o1n0m9l',
     amount: 0.0085,
     usdValue: 425,
-    status: "pending",
+    status: 'pending',
     timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000),
-    bountyTitle: "Performance Optimization",
+    bountyTitle: 'Performance Optimization',
     confirmations: 0,
   },
 ];
@@ -100,11 +100,11 @@ export function TransactionsPage() {
   const [transactions] = useState(sampleTransactions);
 
   const totalSent = transactions
-    .filter((tx) => tx.status === "confirmed")
+    .filter((tx) => tx.status === 'confirmed')
     .reduce((sum, tx) => sum + tx.amount, 0);
 
   const totalUsdSent = transactions
-    .filter((tx) => tx.status === "confirmed")
+    .filter((tx) => tx.status === 'confirmed')
     .reduce((sum, tx) => sum + tx.usdValue, 0);
 
   return (
@@ -206,7 +206,7 @@ export function TransactionsPage() {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-3 text-xs text-gray-500">
                       <span>{formatTimeAgo(transaction.timestamp)}</span>
-                      {transaction.status === "confirmed" && (
+                      {transaction.status === 'confirmed' && (
                         <span>{transaction.confirmations} conf.</span>
                       )}
                     </div>
@@ -263,7 +263,7 @@ export function TransactionsPage() {
                       <span className="text-sm text-gray-500">
                         {formatTimeAgo(transaction.timestamp)}
                       </span>
-                      {transaction.status === "confirmed" && (
+                      {transaction.status === 'confirmed' && (
                         <span className="text-sm text-gray-500">
                           {transaction.confirmations} confirmations
                         </span>

@@ -1,5 +1,5 @@
-import { useQuery } from "@tanstack/react-query";
-import { bountyService } from "../services/bounties/bountyService";
+import { useQuery } from '@tanstack/react-query';
+import { bountyService } from '../services/bounties/bountyService';
 
 export interface Bounty {
   id: string;
@@ -17,7 +17,7 @@ const fetchCompanyBounties = async (
   user: { success: boolean } | null,
 ): Promise<Bounty[]> => {
   if (!user?.success) {
-    throw new Error("User not authenticated");
+    throw new Error('User not authenticated');
   }
 
   const response = await bountyService.getBountiesByCompanyID(uid as string);
@@ -26,16 +26,16 @@ const fetchCompanyBounties = async (
     return response.bounties.map((bounty: any) => ({
       id: bounty.id,
       title: bounty.title,
-      description: bounty.description || "",
+      description: bounty.description || '',
       bountyBTC: bounty.bountyBTC || 0.001,
-      category: bounty.category || "",
-      difficulty: bounty.difficulty || "",
-      company: bounty.companyName || "",
-      deadline: bounty.deadline || "",
+      category: bounty.category || '',
+      difficulty: bounty.difficulty || '',
+      company: bounty.companyName || '',
+      deadline: bounty.deadline || '',
     }));
   }
 
-  throw new Error(response.error || "Failed to load bounties");
+  throw new Error(response.error || 'Failed to load bounties');
 };
 
 export function useGetCompanyBounties(
@@ -43,7 +43,7 @@ export function useGetCompanyBounties(
   user: { success: boolean } | null,
 ) {
   return useQuery<Bounty[], Error>({
-    queryKey: ["companyBounties", uid],
+    queryKey: ['companyBounties', uid],
     queryFn: () => fetchCompanyBounties(uid, user),
 
     enabled: !!uid && !!user,

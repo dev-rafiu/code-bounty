@@ -1,9 +1,9 @@
-import { useState } from "react";
-import { Navigate } from "react-router-dom";
-import { LoadingState } from "../../../components/common/LoadingState";
-import { useAppContext } from "../../../hooks/useAppContext";
-import { BountyCard } from "../components/BountyCard";
-import { useGetBounties } from "../hooks/useBounties";
+import { useState } from 'react';
+import { Navigate } from 'react-router-dom';
+import { LoadingState } from '../../../components/common/LoadingState';
+import { useAppContext } from '../../../hooks/useAppContext';
+import { BountyCard } from '../components/BountyCard';
+import { useGetBounties } from '../hooks/useBounties';
 
 import {
   Select,
@@ -11,11 +11,11 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../../../components/ui/select";
+} from '../../../components/ui/select';
 
 export const DevBountiesPage = () => {
-  const [category, setCategory] = useState<string>("all");
-  const [difficulty, setDifficulty] = useState<string>("all");
+  const [category, setCategory] = useState<string>('all');
+  const [difficulty, setDifficulty] = useState<string>('all');
 
   const { user } = useAppContext();
   const { data: bounties = [], isLoading: loading, error } = useGetBounties();
@@ -35,7 +35,7 @@ export const DevBountiesPage = () => {
   if (error) {
     return (
       <p className="text-destructive text-center">
-        {error.message || "Failed to load bounties"}
+        {error.message || 'Failed to load bounties'}
       </p>
     );
   }

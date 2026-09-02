@@ -1,13 +1,13 @@
-import { useState, type FormEvent } from "react";
-import { useNavigate } from "react-router-dom";
-import { toast } from "sonner";
-import { SiGithub } from "react-icons/si";
-import { Input } from "../../../components/ui/input";
-import { Button } from "../../../components/ui/button";
-import { Label } from "../../../components/ui/label";
-import { useSubmitSolution } from "../hooks/useSubmitSolution";
-import type { TBounty } from "../../bounties/types";
-import { formatDeadline } from "../utils/formatDeadline";
+import { useState, type FormEvent } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
+import { SiGithub } from 'react-icons/si';
+import { Input } from '../../../components/ui/input';
+import { Button } from '../../../components/ui/button';
+import { Label } from '../../../components/ui/label';
+import { useSubmitSolution } from '../hooks/useSubmitSolution';
+import type { TBounty } from '../../bounties/types';
+import { formatDeadline } from '../utils/formatDeadline';
 
 type SubmitSolutionFormProps = {
   bounty: TBounty;
@@ -18,8 +18,8 @@ export const SubmitSolutionForm = ({
   bounty,
   bountyID,
 }: SubmitSolutionFormProps) => {
-  const [repoURL, setRepoURL] = useState("");
-  const [btcAddress, setBtcAddress] = useState("");
+  const [repoURL, setRepoURL] = useState('');
+  const [btcAddress, setBtcAddress] = useState('');
 
   const navigate = useNavigate();
 
@@ -29,7 +29,7 @@ export const SubmitSolutionForm = ({
     e.preventDefault();
 
     if (!repoURL || !btcAddress) {
-      toast.error("Please fill in all fields.");
+      toast.error('Please fill in all fields.');
       return;
     }
 
@@ -41,21 +41,21 @@ export const SubmitSolutionForm = ({
 
     submitSolutionMutation.mutate(payload, {
       onSuccess: () => {
-        setRepoURL("");
-        setBtcAddress("");
+        setRepoURL('');
+        setBtcAddress('');
       },
     });
   };
 
   return (
     <form onSubmit={handleSubmit} className="bg-card rounded-lg p-8 shadow-md">
-      <header className="bg-primary-50 border-primary-200 mb-6 rounded-lg border p-4">
+      <header className="bg-primary-50 border-primary-200 rounded-lg border p-4">
         <h3 className="text-primary-800 mb-1 font-semibold">
           Challenge: {bounty.title}
         </h3>
 
         <p className="text-primary-700 text-sm">
-          Bounty: {bounty.bountyBTC} BTC • Deadline:{" "}
+          Bounty: {bounty.bountyBTC} BTC • Deadline:{' '}
           {formatDeadline(bounty.deadline)}
         </p>
       </header>
@@ -95,14 +95,14 @@ export const SubmitSolutionForm = ({
             size="lg"
           >
             {submitSolutionMutation.isPending
-              ? "Submitting..."
-              : "Submit Solution"}
+              ? 'Submitting...'
+              : 'Submit Solution'}
           </Button>
 
           <Button
             type="button"
             variant="outline"
-            onClick={() => navigate("/dev-bounties")}
+            onClick={() => navigate('/dev-bounties')}
             size="lg"
           >
             Back to Bounties

@@ -1,6 +1,6 @@
-import { Navigate } from "react-router-dom";
-import { useAppContext } from "../../../hooks/useAppContext";
-import { SignUpForm } from "../components/SignUpForm";
+import { Navigate } from 'react-router-dom';
+import { useAppContext } from '../../../hooks/useAppContext';
+import { SignUpForm } from '../components/SignUpForm';
 
 export const SignUpPage = () => {
   const { user } = useAppContext();

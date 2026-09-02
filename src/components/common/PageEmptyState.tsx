@@ -3,10 +3,7 @@ type PageEmptyStateProps = {
   description: string;
 };
 
-export const PageEmptyState = ({
-  title,
-  description,
-}: PageEmptyStateProps) => {
+export const PageEmptyState = ({ title, description }: PageEmptyStateProps) => {
   return (
     <div className="p-8 text-center">
       <div className="text-gray-500">{title}</div>

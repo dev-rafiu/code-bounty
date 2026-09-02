@@ -1,4 +1,4 @@
-export type UserRole = "DEVELOPER" | "COMPANY";
+export type UserRole = 'DEVELOPER' | 'COMPANY';
 
 export interface SignUpPayload {
   email: string;

@@ -1,18 +1,18 @@
-import { render, screen } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
-import { MemoryRouter } from "react-router-dom";
-import { beforeEach, describe, expect, it, jest } from "@jest/globals";
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { MemoryRouter } from 'react-router-dom';
+import { beforeEach, describe, expect, it, jest } from '@jest/globals';
 
-import { LoginForm } from "./LoginForm";
-import { useLogin } from "../hooks/useAuth";
+import { LoginForm } from './LoginForm';
+import { useLogin } from '../hooks/useAuth';
 
 // mock useLogin
-jest.mock("../hooks/useAuth", () => ({
+jest.mock('../hooks/useAuth', () => ({
   useLogin: jest.fn(),
 }));
 
 // mock sonner
-jest.mock("sonner", () => ({
+jest.mock('sonner', () => ({
   toast: {
     error: jest.fn(),
   },
@@ -28,7 +28,7 @@ const renderLoginForm = () => {
   );
 };
 
-describe("Login Form", () => {
+describe('Login Form', () => {
   beforeEach(() => {
     jest.clearAllMocks();
 
@@ -38,81 +38,81 @@ describe("Login Form", () => {
     } as unknown as ReturnType<typeof useLogin>);
   });
 
-  it("renders the login form", () => {
+  it('renders the login form', () => {
     renderLoginForm();
 
     expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/^password$/i)).toBeInTheDocument();
 
     expect(
-      screen.getByRole("button", { name: /sign in/i }),
+      screen.getByRole('button', { name: /sign in/i }),
     ).toBeInTheDocument();
 
-    expect(screen.getByRole("link", { name: /sign up/i })).toHaveAttribute(
-      "href",
-      "/sign-up",
+    expect(screen.getByRole('link', { name: /sign up/i })).toHaveAttribute(
+      'href',
+      '/sign-up',
     );
   });
 
-  it("shows an email validation error when an invalid email is entered", async () => {
+  it('shows an email validation error when an invalid email is entered', async () => {
     const user = userEvent.setup();
 
     renderLoginForm();
 
     const emailInput = screen.getByLabelText(/email/i);
 
-    await user.type(emailInput, "companyacc01");
+    await user.type(emailInput, 'companyacc01');
 
     expect(
-      screen.getByText("Please enter a valid email address"),
+      screen.getByText('Please enter a valid email address'),
     ).toBeInTheDocument();
 
-    expect(emailInput).toHaveAttribute("aria-invalid", "true");
+    expect(emailInput).toHaveAttribute('aria-invalid', 'true');
   });
 
-  it("clears the email error when a valid email is entered", async () => {
+  it('clears the email error when a valid email is entered', async () => {
     const user = userEvent.setup();
 
     renderLoginForm();
 
     const emailInput = screen.getByLabelText(/email/i);
 
-    await user.type(emailInput, "invalid-email");
+    await user.type(emailInput, 'invalid-email');
 
     expect(
-      screen.getByText("Please enter a valid email address"),
+      screen.getByText('Please enter a valid email address'),
     ).toBeInTheDocument();
 
     await user.clear(emailInput);
-    await user.type(emailInput, "john@example.com");
+    await user.type(emailInput, 'john@example.com');
 
     expect(
-      screen.queryByText("Please enter a valid email address"),
+      screen.queryByText('Please enter a valid email address'),
     ).not.toBeInTheDocument();
 
-    expect(emailInput).toHaveAttribute("aria-invalid", "false");
+    expect(emailInput).toHaveAttribute('aria-invalid', 'false');
   });
 
-  it("toggles password visibility", async () => {
+  it('toggles password visibility', async () => {
     const user = userEvent.setup();
 
     renderLoginForm();
 
     const passwordInput = screen.getByLabelText(/^password$/i);
 
-    expect(passwordInput).toHaveAttribute("type", "password");
+    expect(passwordInput).toHaveAttribute('type', 'password');
 
-    const showPasswordButton = screen.getByRole("button", {
+    const showPasswordButton = screen.getByRole('button', {
       name: /show password/i,
     });
 
     await user.click(showPasswordButton);
 
-    expect(passwordInput).toHaveAttribute("type", "text");
+    expect(passwordInput).toHaveAttribute('type', 'text');
 
     // ====
 
-    const hidePasswordButton = screen.getByRole("button", {
+    const hidePasswordButton = screen.getByRole('button', {
       name: /hide password/i,
     });
 
@@ -120,7 +120,7 @@ describe("Login Form", () => {
 
     await user.click(hidePasswordButton);
 
-    expect(passwordInput).toHaveAttribute("type", "password");
+    expect(passwordInput).toHaveAttribute('type', 'password');
   });
 
   //   it("shows a toast when email and password are empty", async () => {
@@ -158,17 +158,17 @@ describe("Login Form", () => {
   //     expect(mockMutate).not.toHaveBeenCalled();
   //   });
 
-  it("calls login with the correct credentials", async () => {
+  it('calls login with the correct credentials', async () => {
     const user = userEvent.setup();
 
     renderLoginForm();
 
-    await user.type(screen.getByLabelText(/email/i), "john@example.com");
+    await user.type(screen.getByLabelText(/email/i), 'john@example.com');
 
-    await user.type(screen.getByLabelText(/^password$/i), "password123");
+    await user.type(screen.getByLabelText(/^password$/i), 'password123');
 
     await user.click(
-      screen.getByRole("button", {
+      screen.getByRole('button', {
         name: /sign in/i,
       }),
     );
@@ -176,8 +176,8 @@ describe("Login Form", () => {
     expect(mockMutate).toHaveBeenCalledTimes(1);
 
     expect(mockMutate).toHaveBeenCalledWith({
-      email: "john@example.com",
-      password: "password123",
+      email: 'john@example.com',
+      password: 'password123',
     });
   });
 
@@ -197,15 +197,15 @@ describe("Login Form", () => {
   //     expect(submitButton).toBeDisabled();
   //   });
 
-  it("disables the submit button when there is an email error", async () => {
+  it('disables the submit button when there is an email error', async () => {
     const user = userEvent.setup();
 
     renderLoginForm();
 
-    await user.type(screen.getByLabelText(/email/i), "invalid-email");
+    await user.type(screen.getByLabelText(/email/i), 'invalid-email');
 
     expect(
-      screen.getByRole("button", {
+      screen.getByRole('button', {
         name: /sign in/i,
       }),
     ).toBeDisabled();

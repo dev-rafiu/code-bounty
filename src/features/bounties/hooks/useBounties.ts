@@ -1,7 +1,7 @@
-import { useQuery } from "@tanstack/react-query";
-import { bountyService } from "../../../services/bounties/bountyService";
-import type { TBounty } from "../types";
-import { transformBounty } from "../utils/transformBounty";
+import { useQuery } from '@tanstack/react-query';
+import { bountyService } from '../../../services/bounties/bountyService';
+import type { TBounty } from '../types';
+import { transformBounty } from '../utils/transformBounty';
 
 async function getBounties() {
   const response = await bountyService.getAllBounties();
@@ -17,7 +17,7 @@ async function getBounties() {
 
 export const useGetBounties = () => {
   return useQuery({
-    queryKey: ["bounties"],
+    queryKey: ['bounties'],
     queryFn: getBounties,
   });
 };

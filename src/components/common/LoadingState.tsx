@@ -1,5 +1,5 @@
-import { Loader2 } from "lucide-react";
-import { twMerge } from "tailwind-merge";
+import { Loader2 } from 'lucide-react';
+import { twMerge } from 'tailwind-merge';
 
 type LoadingStateProps = {
   message?: string;
@@ -8,7 +8,7 @@ type LoadingStateProps = {
 };
 
 export const LoadingState = ({
-  message = "Loading...",
+  message = 'Loading...',
   className,
   fullscreen = true,
 }: LoadingStateProps) => {
@@ -16,14 +16,14 @@ export const LoadingState = ({
     <div
       role="status"
       className={twMerge(
-        "flex items-center justify-center",
-        fullscreen ? "min-h-screen" : "min-h-40",
+        'flex items-center justify-center',
+        fullscreen ? 'min-h-screen' : 'min-h-40',
         className,
       )}
     >
       <div className="flex flex-col items-center gap-4">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-        <p className="text-sm text-muted-foreground">{message}</p>
+        <Loader2 className="text-primary h-8 w-8 animate-spin" />
+        <p className="text-muted-foreground text-sm">{message}</p>
       </div>
     </div>
   );

@@ -1,28 +1,28 @@
-import { createBrowserRouter } from "react-router-dom";
-import { BaseLayout } from "./layout/BaseLayout";
-import { HomePage } from "./features/home/pages/HomePage";
-import { LoginPage } from "./features/auth/pages/LoginPage";
-import { SignUpPage } from "./features/auth/pages/SignUpPage";
-import { CompanyBountiesPage } from "./features/bounties/pages/CompanyBountiesPage";
-import { CreateBountyPage } from "./features/bounties/pages/CreateBountyPage";
-import { DevBountiesPage } from "./features/bounties/pages/DevBountiesPage";
-import { CompanySubmissionsPage } from "./features/submissions/pages/CompanySubmissionsPage";
-import { DeveloperSubmissionsPage } from "./features/submissions/pages/DeveloperSubmissionsPage";
-import { SubmitSolutionPage } from "./features/submissions/pages/SubmitSolutionPage";
-import { TransactionsPage } from "./features/transactions/pages/TransactionsPage";
+import { createBrowserRouter } from 'react-router-dom';
+import { BaseLayout } from './layout/BaseLayout';
+import { HomePage } from './features/home/pages/HomePage';
+import { LoginPage } from './features/auth/pages/LoginPage';
+import { SignUpPage } from './features/auth/pages/SignUpPage';
+import { CompanyBountiesPage } from './features/bounties/pages/CompanyBountiesPage';
+import { CreateBountyPage } from './features/bounties/pages/CreateBountyPage';
+import { DevBountiesPage } from './features/bounties/pages/DevBountiesPage';
+import { CompanySubmissionsPage } from './features/submissions/pages/CompanySubmissionsPage';
+import { DeveloperSubmissionsPage } from './features/submissions/pages/DeveloperSubmissionsPage';
+import { SubmitSolutionPage } from './features/submissions/pages/SubmitSolutionPage';
+import { TransactionsPage } from './features/transactions/pages/TransactionsPage';
 
 export const router = createBrowserRouter([
   {
-    path: "/login",
+    path: '/login',
     element: <LoginPage />,
   },
   {
-    path: "/sign-up",
+    path: '/sign-up',
     element: <SignUpPage />,
   },
   {
     element: <BaseLayout />,
-    path: "/",
+    path: '/',
     // errorElement: <Error />,
     children: [
       {
@@ -31,7 +31,7 @@ export const router = createBrowserRouter([
       },
 
       {
-        path: "dev-bounties",
+        path: 'dev-bounties',
         children: [
           {
             index: true,
@@ -41,18 +41,18 @@ export const router = createBrowserRouter([
       },
 
       {
-        path: "company-bounties",
+        path: 'company-bounties',
         children: [
           {
             index: true,
             element: <CompanyBountiesPage />,
           },
-          { path: "create", element: <CreateBountyPage /> },
+          { path: 'create', element: <CreateBountyPage /> },
         ],
       },
 
       {
-        path: "transactions",
+        path: 'transactions',
         children: [
           {
             index: true,
@@ -62,7 +62,7 @@ export const router = createBrowserRouter([
       },
 
       {
-        path: "submissions",
+        path: 'submissions',
         children: [
           {
             index: true,
@@ -72,7 +72,7 @@ export const router = createBrowserRouter([
       },
 
       {
-        path: "company-submissions",
+        path: 'company-submissions',
         children: [
           {
             index: true,
@@ -82,7 +82,7 @@ export const router = createBrowserRouter([
       },
 
       {
-        path: "submit/:bountyId",
+        path: 'submit/:bountyId',
         element: <SubmitSolutionPage />,
       },
     ],

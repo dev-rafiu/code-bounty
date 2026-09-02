@@ -1,6 +1,6 @@
-import { Navigate } from "react-router-dom";
-import { useAppContext } from "../../../hooks/useAppContext";
-import { LoginForm } from "../components/LoginForm";
+import { Navigate } from 'react-router-dom';
+import { useAppContext } from '../../../hooks/useAppContext';
+import { LoginForm } from '../components/LoginForm';
 
 export const LoginPage = () => {
   const { user } = useAppContext();

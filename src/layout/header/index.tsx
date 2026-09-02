@@ -1,28 +1,28 @@
-import { Menu } from "lucide-react";
-import { useAppContext } from "../../hooks/useAppContext";
-import { useState } from "react";
+import { Menu } from 'lucide-react';
+import { useAppContext } from '../../hooks/useAppContext';
+import { useState } from 'react';
 
-import { Avatar, AvatarFallback } from "../../components/ui/avatar";
+import { Avatar, AvatarFallback } from '../../components/ui/avatar';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "../../components/ui/dropdown-menu";
+} from '../../components/ui/dropdown-menu';
 import {
   Sheet,
   SheetContent,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "../../components/ui/sheet";
+} from '../../components/ui/sheet';
 
-import { Link, useNavigate } from "react-router-dom";
-import { authService } from "../../services/auth/authService";
-import { toast } from "sonner";
-import { useEffect } from "react";
-import { RoleIndicator } from "./components/RoleIndicator";
-import { NavigationLinks } from "./components/NavigationLinks";
+import { Link, useNavigate } from 'react-router-dom';
+import { authService } from '../../services/auth/authService';
+import { toast } from 'sonner';
+import { useEffect } from 'react';
+import { RoleIndicator } from './components/RoleIndicator';
+import { NavigationLinks } from './components/NavigationLinks';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -33,10 +33,10 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "../../components/ui/alert-dialog";
+} from '../../components/ui/alert-dialog';
 
 export const Header = () => {
-  const [name, setName] = useState("");
+  const [name, setName] = useState('');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const navigate = useNavigate();
@@ -45,22 +45,22 @@ export const Header = () => {
   const handleLogout = async () => {
     try {
       toast.promise(authService.signOut(), {
-        loading: "Logging you out...",
-        success: "Logged out successfully!",
-        error: "Failed to log out.",
+        loading: 'Logging you out...',
+        success: 'Logged out successfully!',
+        error: 'Failed to log out.',
       });
 
       setUser(null);
-      navigate("/");
+      navigate('/');
       setIsMobileMenuOpen(false);
     } catch (error) {
-      console.error("Logout failed:", error);
+      console.error('Logout failed:', error);
     }
   };
 
   useEffect(() => {
     if (user?.success) {
-      setName(user?.user?.companyName || user?.user?.name || "User");
+      setName(user?.user?.companyName || user?.user?.name || 'User');
     }
   }, [user]);
 

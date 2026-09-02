@@ -1,10 +1,10 @@
-import { Mail, Lock, Eye, EyeOff } from "lucide-react";
-import { useState, type FormEvent } from "react";
-import { Link } from "react-router-dom";
-import { toast } from "sonner";
-import { Input } from "../../../components/ui/input";
-import { Button } from "../../../components/ui/button";
-import { Label } from "../../../components/ui/label";
+import { Mail, Lock, Eye, EyeOff } from 'lucide-react';
+import { useState, type FormEvent } from 'react';
+import { Link } from 'react-router-dom';
+import { toast } from 'sonner';
+import { Input } from '../../../components/ui/input';
+import { Button } from '../../../components/ui/button';
+import { Label } from '../../../components/ui/label';
 
 import {
   Select,
@@ -12,18 +12,18 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../../../components/ui/select";
+} from '../../../components/ui/select';
 
-import { useLogin } from "../hooks/useAuth";
-import { validateEmail } from "../utils/validateEmail";
+import { useLogin } from '../hooks/useAuth';
+import { validateEmail } from '../utils/validateEmail';
 
 export const LoginForm = () => {
   const [loginForm, setLoginForm] = useState({
-    email: "",
-    password: "",
-    role: "",
+    email: '',
+    password: '',
+    role: '',
   });
-  const [emailError, setEmailError] = useState("");
+  const [emailError, setEmailError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
   const loginMutation = useLogin();
@@ -32,12 +32,12 @@ export const LoginForm = () => {
     const email = e.target.value;
     setLoginForm({ ...loginForm, email });
 
-    if (email === "") {
-      setEmailError("");
+    if (email === '') {
+      setEmailError('');
     } else if (!validateEmail(email)) {
-      setEmailError("Please enter a valid email address");
+      setEmailError('Please enter a valid email address');
     } else {
-      setEmailError("");
+      setEmailError('');
     }
   };
 
@@ -45,12 +45,12 @@ export const LoginForm = () => {
     e.preventDefault();
 
     if (!loginForm.password || !loginForm.email) {
-      toast.error("Please add email and password");
+      toast.error('Please add email and password');
       return;
     }
 
     if (!validateEmail(loginForm.email)) {
-      toast.error("Please enter a valid email address");
+      toast.error('Please enter a valid email address');
       return;
     }
 
@@ -75,7 +75,7 @@ export const LoginForm = () => {
               type="email"
               value={loginForm.email}
               onChange={handleEmailChange}
-              className={`pl-10 ${emailError ? "border-destructive" : ""}`}
+              className={`pl-10 ${emailError ? 'border-destructive' : ''}`}
               placeholder="your@email.com"
               aria-invalid={!!emailError}
             />
@@ -92,7 +92,7 @@ export const LoginForm = () => {
             <Lock className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
             <Input
               id="password"
-              type={showPassword ? "text" : "password"}
+              type={showPassword ? 'text' : 'password'}
               value={loginForm.password}
               onChange={(e) =>
                 setLoginForm({ ...loginForm, password: e.target.value })
@@ -104,7 +104,7 @@ export const LoginForm = () => {
               type="button"
               onClick={() => setShowPassword(!showPassword)}
               className="text-muted-foreground hover:text-foreground absolute top-1/2 right-3 -translate-y-1/2 transition-colors"
-              aria-label={showPassword ? "Hide password" : "Show password"}
+              aria-label={showPassword ? 'Hide password' : 'Show password'}
             >
               {showPassword ? (
                 <EyeOff className="h-4 w-4" />
@@ -141,7 +141,7 @@ export const LoginForm = () => {
         className="w-full cursor-pointer"
         size="lg"
       >
-        {loginMutation.isPending ? "Signing in..." : "Sign in"}
+        {loginMutation.isPending ? 'Signing in...' : 'Sign in'}
       </Button>
 
       <div className="flex items-center justify-center gap-1 text-center text-sm">

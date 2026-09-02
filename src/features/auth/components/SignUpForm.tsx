@@ -1,10 +1,10 @@
-import { useState, type FormEvent } from "react";
-import { Mail, Lock, Eye, EyeOff } from "lucide-react";
-import { Link } from "react-router-dom";
-import { toast } from "sonner";
-import { Input } from "../../../components/ui/input";
-import { Button } from "../../../components/ui/button";
-import { Label } from "../../../components/ui/label";
+import { useState, type FormEvent } from 'react';
+import { Mail, Lock, Eye, EyeOff } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { toast } from 'sonner';
+import { Input } from '../../../components/ui/input';
+import { Button } from '../../../components/ui/button';
+import { Label } from '../../../components/ui/label';
 
 import {
   Select,
@@ -12,37 +12,37 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../../../components/ui/select";
+} from '../../../components/ui/select';
 
-import { useSignUp } from "../hooks/useAuth";
-import type { SignUpPayload, UserRole } from "../types";
+import { useSignUp } from '../hooks/useAuth';
+import type { SignUpPayload, UserRole } from '../types';
 
 export const SignUpForm = () => {
   const [signupForm, setSignupForm] = useState({
-    name: "",
-    companyName: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-    role: "",
+    name: '',
+    companyName: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+    role: '',
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const signUpMutation = useSignUp();
 
-  const roleOptions: UserRole[] = ["DEVELOPER", "COMPANY"];
+  const roleOptions: UserRole[] = ['DEVELOPER', 'COMPANY'];
 
   const handleSignUp = (e: FormEvent) => {
     e.preventDefault();
 
     if (signupForm.password !== signupForm.confirmPassword) {
-      toast.error("Passwords do not match!");
+      toast.error('Passwords do not match!');
       return;
     }
 
     if (!signupForm.role || !signupForm.email || !signupForm.password) {
-      toast.error("Please fill in all required fields");
+      toast.error('Please fill in all required fields');
       return;
     }
 
@@ -52,9 +52,9 @@ export const SignUpForm = () => {
       role: signupForm.role as UserRole,
     };
 
-    if (signupForm.role === "DEVELOPER") {
-      payload.name = signupForm.name || "New User";
-    } else if (signupForm.role === "COMPANY") {
+    if (signupForm.role === 'DEVELOPER') {
+      payload.name = signupForm.name || 'New User';
+    } else if (signupForm.role === 'COMPANY') {
       payload.companyName = signupForm.companyName;
     }
 
@@ -108,7 +108,7 @@ export const SignUpForm = () => {
           </Select>
         </div>
 
-        {signupForm.role === "DEVELOPER" || signupForm.role === "" ? (
+        {signupForm.role === 'DEVELOPER' || signupForm.role === '' ? (
           <div className="space-y-2">
             <Label htmlFor="name">Full Name</Label>
             <Input
@@ -147,7 +147,7 @@ export const SignUpForm = () => {
             <Lock className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
             <Input
               id="signup-password"
-              type={showPassword ? "text" : "password"}
+              type={showPassword ? 'text' : 'password'}
               required
               value={signupForm.password}
               onChange={(e) =>
@@ -160,7 +160,7 @@ export const SignUpForm = () => {
               type="button"
               onClick={() => setShowPassword(!showPassword)}
               className="text-muted-foreground hover:text-foreground absolute top-1/2 right-3 -translate-y-1/2 transition-colors"
-              aria-label={showPassword ? "Hide password" : "Show password"}
+              aria-label={showPassword ? 'Hide password' : 'Show password'}
             >
               {showPassword ? (
                 <EyeOff className="h-4 w-4" />
@@ -178,7 +178,7 @@ export const SignUpForm = () => {
             <Lock className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
             <Input
               id="confirm-password"
-              type={showConfirmPassword ? "text" : "password"}
+              type={showConfirmPassword ? 'text' : 'password'}
               required
               value={signupForm.confirmPassword}
               onChange={(e) =>
@@ -195,7 +195,7 @@ export const SignUpForm = () => {
               onClick={() => setShowConfirmPassword(!showConfirmPassword)}
               className="text-muted-foreground hover:text-foreground absolute top-1/2 right-3 -translate-y-1/2 transition-colors"
               aria-label={
-                showConfirmPassword ? "Hide password" : "Show password"
+                showConfirmPassword ? 'Hide password' : 'Show password'
               }
             >
               {showConfirmPassword ? (
@@ -214,7 +214,7 @@ export const SignUpForm = () => {
         size="lg"
         disabled={signUpMutation.isPending}
       >
-        {signUpMutation.isPending ? "Creating account..." : "Create Account"}
+        {signUpMutation.isPending ? 'Creating account...' : 'Create Account'}
       </Button>
 
       <div className="flex items-center justify-center gap-1 text-center text-sm">

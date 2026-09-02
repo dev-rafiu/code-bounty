@@ -1,5 +1,5 @@
-import type { AuthResponse } from "../features/auth/types";
-import type { TBounty } from "../features/bounties/types";
+import type { AuthResponse } from '../features/auth/types';
+import type { TBounty } from '../features/bounties/types';
 
 export type AppContextType = {
   currentView: string;

@@ -1,12 +1,12 @@
-import { useState } from "react";
-import { Bitcoin, ChevronDownIcon, Loader2 } from "lucide-react";
-import { toast } from "sonner";
-import { format } from "date-fns";
-import { bountyService } from "../../../services/bounties/bountyService";
-import { Input } from "../../../components/ui/input";
-import { Button } from "../../../components/ui/button";
-import { Label } from "../../../components/ui/label";
-import { Textarea } from "../../../components/ui/textarea";
+import { useState } from 'react';
+import { Bitcoin, ChevronDownIcon, Loader2 } from 'lucide-react';
+import { toast } from 'sonner';
+import { format } from 'date-fns';
+import { bountyService } from '../../../services/bounties/bountyService';
+import { Input } from '../../../components/ui/input';
+import { Button } from '../../../components/ui/button';
+import { Label } from '../../../components/ui/label';
+import { Textarea } from '../../../components/ui/textarea';
 
 import {
   Select,
@@ -14,23 +14,23 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../../../components/ui/select";
+} from '../../../components/ui/select';
 
-import { Calendar } from "../../../components/ui/calendar";
-import { useAppContext } from "../../../hooks/useAppContext";
+import { Calendar } from '../../../components/ui/calendar';
+import { useAppContext } from '../../../hooks/useAppContext';
 
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "../../../components/ui/popover";
+} from '../../../components/ui/popover';
 
 export const CreateBountyPage = () => {
   const [form, setForm] = useState({
-    title: "",
-    description: "",
-    category: "",
-    difficulty: "",
+    title: '',
+    description: '',
+    category: '',
+    difficulty: '',
     bountyBTC: 0.001,
     deadline: undefined as Date | undefined,
   });
@@ -50,10 +50,10 @@ export const CreateBountyPage = () => {
 
   const resetForm = () => {
     setForm({
-      title: "",
-      description: "",
-      category: "Coding",
-      difficulty: "Beginner",
+      title: '',
+      description: '',
+      category: 'Coding',
+      difficulty: 'Beginner',
       bountyBTC: 0.001,
       deadline: undefined,
     });
@@ -69,7 +69,7 @@ export const CreateBountyPage = () => {
       !form.difficulty ||
       !form.deadline
     ) {
-      toast.error("Please fill in all required fields");
+      toast.error('Please fill in all required fields');
       return;
     }
 
@@ -79,7 +79,7 @@ export const CreateBountyPage = () => {
 
     const payload = {
       ...form,
-      deadline: format(form.deadline!, "yyyy-MM-dd"),
+      deadline: format(form.deadline!, 'yyyy-MM-dd'),
       company: companyName,
       bountyBTC: Number(form.bountyBTC),
     };
@@ -87,11 +87,11 @@ export const CreateBountyPage = () => {
     bountyService
       .createBounty(payload)
       .then(() => {
-        toast.success("Bounty created successfully!");
+        toast.success('Bounty created successfully!');
         resetForm();
       })
       .catch((error: any) => {
-        toast.error(error?.message || "Something went wrong");
+        toast.error(error?.message || 'Something went wrong');
       })
       .finally(() => {
         setIsLoading(false);
@@ -206,7 +206,7 @@ export const CreateBountyPage = () => {
                     className="text-muted-foreground hover:text-muted-foreground w-full justify-start text-left font-normal hover:bg-transparent"
                   >
                     {form.deadline ? (
-                      format(form.deadline, "PPP")
+                      format(form.deadline, 'PPP')
                     ) : (
                       <span>Select deadline</span>
                     )}
@@ -245,7 +245,7 @@ export const CreateBountyPage = () => {
                   <span>Publishing Bounty...</span>
                 </>
               ) : (
-                "Publish Bounty"
+                'Publish Bounty'
               )}
             </Button>
 

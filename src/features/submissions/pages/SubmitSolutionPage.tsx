@@ -1,10 +1,10 @@
-import { useParams } from "react-router-dom";
-import { useAppContext } from "../../../hooks/useAppContext";
-import { SubmitSolutionForm } from "../components/SubmitSolutionForm";
-import { SubmitSolutionLoadingState } from "../components/SubmitSolutionLoadingState";
-import { SubmitSolutionNotFoundState } from "../components/SubmitSolutionNotFoundState";
-import { SubmitSolutionUnauthenticatedState } from "../components/SubmitSolutionUnauthenticatedState";
-import { useGetBountyByID } from "../hooks/useBounty";
+import { useParams } from 'react-router-dom';
+import { useAppContext } from '../../../hooks/useAppContext';
+import { SubmitSolutionForm } from '../components/SubmitSolutionForm';
+import { SubmitSolutionLoadingState } from '../components/SubmitSolutionLoadingState';
+import { SubmitSolutionNotFoundState } from '../components/SubmitSolutionNotFoundState';
+import { SubmitSolutionUnauthenticatedState } from '../components/SubmitSolutionUnauthenticatedState';
+import { useGetBountyByID } from '../hooks/useBounty';
 
 export const SubmitSolutionPage = () => {
   const { bountyId } = useParams();

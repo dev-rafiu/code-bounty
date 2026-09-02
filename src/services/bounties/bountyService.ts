@@ -13,21 +13,20 @@ import {
   limit,
   startAfter,
   documentId,
-} from "firebase/firestore";
+} from 'firebase/firestore';
 
-import { auth, db } from "../../config/firebase";
-import { COLLECTIONS } from "../firestore-structure";
+import { auth, db } from '../../config/firebase';
+import { COLLECTIONS } from '../firestore-structure';
 
-import type { CreateBountyPayload } from "../../features/bounties/types";
+import type { CreateBountyPayload } from '../../features/bounties/types';
 
 type Result<T extends object = object> =
-  | ({ success: true } & T)
-  | { success: false; error: string };
+  ({ success: true } & T) | { success: false; error: string };
 
 function toErrorMessage(error: unknown): string {
   if (error instanceof Error) return error.message;
-  if (typeof error === "string") return error;
-  return "An unknown error occurred";
+  if (typeof error === 'string') return error;
+  return 'An unknown error occurred';
 }
 
 class BountyService {
@@ -40,12 +39,12 @@ class BountyService {
     deadline,
   }: CreateBountyPayload): Promise<Result> {
     const user = auth.currentUser;
-    if (!user) return { success: false, error: "User not authenticated" };
+    if (!user) return { success: false, error: 'User not authenticated' };
 
     try {
       const tokenResult = await user.getIdTokenResult();
-      if (tokenResult.claims.role !== "COMPANY") {
-        return { success: false, error: "Only companies can create bounties" };
+      if (tokenResult.claims.role !== 'COMPANY') {
+        return { success: false, error: 'Only companies can create bounties' };
       }
 
       const companyName = tokenResult.claims.companyName as string | undefined;
@@ -80,7 +79,7 @@ class BountyService {
     try {
       let bountyQuery = query(
         collection(db, COLLECTIONS.BOUNTIES),
-        orderBy("createdAt", "desc"),
+        orderBy('createdAt', 'desc'),
         limit(pageSize),
       );
 
@@ -114,7 +113,7 @@ class BountyService {
       if (!bountySnap.exists()) {
         return {
           success: false,
-          error: "Bounty not found",
+          error: 'Bounty not found',
         };
       }
 
@@ -134,7 +133,7 @@ class BountyService {
     try {
       const bountiesQuery = query(
         collection(db, COLLECTIONS.BOUNTIES),
-        where("companyUid", "==", companyUid),
+        where('companyUid', '==', companyUid),
       );
 
       const querySnapshot = await getDocs(bountiesQuery);
@@ -161,16 +160,16 @@ class BountyService {
       if (!userSnap.exists()) {
         return {
           success: false,
-          error: "Company not found",
+          error: 'Company not found',
         };
       }
 
       const userData = userSnap.data();
 
-      if (userData.role !== "COMPANY") {
+      if (userData.role !== 'COMPANY') {
         return {
           success: false,
-          error: "User is not a company",
+          error: 'User is not a company',
         };
       }
 
@@ -205,7 +204,7 @@ class BountyService {
           getDocs(
             query(
               collection(db, COLLECTIONS.USERS),
-              where(documentId(), "in", chunk),
+              where(documentId(), 'in', chunk),
             ),
           ),
         ),

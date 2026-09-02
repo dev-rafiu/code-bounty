@@ -1,12 +1,12 @@
-import { Bitcoin, Code, Trophy, Users } from "lucide-react";
-import { Link, Navigate } from "react-router-dom";
-import { useAppContext } from "../../../hooks/useAppContext";
+import { Bitcoin, Code, Trophy, Users } from 'lucide-react';
+import { Link, Navigate } from 'react-router-dom';
+import { useAppContext } from '../../../hooks/useAppContext';
 
 export const HomePage = () => {
   const { user } = useAppContext();
 
   if (user?.success) {
-    if (user.user.role === "COMPANY") {
+    if (user.user.role === 'COMPANY') {
       return <Navigate to="/company-bounties" replace />;
     } else {
       return <Navigate to="/dev-bounties" replace />;

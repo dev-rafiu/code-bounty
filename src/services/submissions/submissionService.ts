@@ -9,12 +9,12 @@ import {
   serverTimestamp,
   type DocumentData,
   documentId,
-} from "firebase/firestore";
+} from 'firebase/firestore';
 
-import { auth, db } from "../../config/firebase";
-import { COLLECTIONS } from "../firestore-structure";
-import { bountyService } from "../bounties/bountyService";
-import type { SubmitSolutionPayload } from "../../features/submissions/types";
+import { auth, db } from '../../config/firebase';
+import { COLLECTIONS } from '../firestore-structure';
+import { bountyService } from '../bounties/bountyService';
+import type { SubmitSolutionPayload } from '../../features/submissions/types';
 
 type Success<T extends object = object> = { success: true } & T;
 type Failure = { success: false; error: string };
@@ -24,8 +24,8 @@ type Developer = { id: string } & DocumentData;
 
 function toErrorMessage(error: unknown): string {
   if (error instanceof Error) return error.message;
-  if (typeof error === "string") return error;
-  return "An unknown error occurred";
+  if (typeof error === 'string') return error;
+  return 'An unknown error occurred';
 }
 
 function chunk<T>(arr: T[], size = 30): T[][] {
@@ -43,14 +43,14 @@ class SubmissionService {
     { success: true } | { success: false; error: string }
   > {
     const user = auth.currentUser;
-    if (!user) return { success: false, error: "User not authenticated" };
+    if (!user) return { success: false, error: 'User not authenticated' };
 
     try {
       const tokenResult = await user.getIdTokenResult();
-      if (tokenResult.claims.role !== "DEVELOPER") {
+      if (tokenResult.claims.role !== 'DEVELOPER') {
         return {
           success: false,
-          error: "Only developers can submit solutions",
+          error: 'Only developers can submit solutions',
         };
       }
 
@@ -74,7 +74,7 @@ class SubmissionService {
     try {
       const submissionsQuery = query(
         collection(db, COLLECTIONS.SUBMISSIONS),
-        where("developerUid", "==", developerUid),
+        where('developerUid', '==', developerUid),
       );
 
       const querySnapshot = await getDocs(submissionsQuery);
@@ -101,17 +101,17 @@ class SubmissionService {
       if (!userSnap.exists()) {
         return {
           success: false,
-          error: "Developer not found",
+          error: 'Developer not found',
         };
       }
 
       const userData = userSnap.data();
 
       // Verify that this user is actually a developer
-      if (userData.role !== "DEVELOPER") {
+      if (userData.role !== 'DEVELOPER') {
         return {
           success: false,
-          error: "User is not a developer",
+          error: 'User is not a developer',
         };
       }
 
@@ -146,7 +146,7 @@ class SubmissionService {
           getDocs(
             query(
               collection(db, COLLECTIONS.USERS),
-              where(documentId(), "in", c),
+              where(documentId(), 'in', c),
             ),
           ),
         ),
@@ -156,7 +156,7 @@ class SubmissionService {
         .flatMap((snap) =>
           snap.docs.map((d): Developer => ({ id: d.id, ...d.data() })),
         )
-        .filter((u): u is Developer => u.role === "DEVELOPER");
+        .filter((u): u is Developer => u.role === 'DEVELOPER');
 
       return { success: true, developers };
     } catch (error: unknown) {
@@ -172,7 +172,7 @@ class SubmissionService {
       if (!companyBountiesResult.success || !companyBountiesResult.bounties) {
         return {
           success: false,
-          error: "Failed to fetch company bounties",
+          error: 'Failed to fetch company bounties',
         };
       }
 
@@ -196,7 +196,7 @@ class SubmissionService {
           getDocs(
             query(
               collection(db, COLLECTIONS.SUBMISSIONS),
-              where("bountyId", "in", idsChunk),
+              where('bountyId', 'in', idsChunk),
             ),
           ),
         ),

@@ -100,42 +100,42 @@ FIRESTORE COLLECTIONS STRUCTURE:
 
 // Collection names as constants
 export const COLLECTIONS = {
-  USERS: "users",
-  BOUNTIES: "bounties",
-  SUBMISSIONS: "submissions",
-  TRANSACTIONS: "transactions",
-  COMPANIES: "companies",
+  USERS: 'users',
+  BOUNTIES: 'bounties',
+  SUBMISSIONS: 'submissions',
+  TRANSACTIONS: 'transactions',
+  COMPANIES: 'companies',
 };
 
 // Status constants
 export const BOUNTY_STATUS = {
-  OPEN: "open",
-  IN_PROGRESS: "in-progress",
-  COMPLETED: "completed",
-  CANCELLED: "cancelled",
+  OPEN: 'open',
+  IN_PROGRESS: 'in-progress',
+  COMPLETED: 'completed',
+  CANCELLED: 'cancelled',
 };
 
 export const SUBMISSION_STATUS = {
-  SUBMITTED: "submitted",
-  REVIEWED: "reviewed",
-  WINNER: "winner",
-  REJECTED: "rejected",
+  SUBMITTED: 'submitted',
+  REVIEWED: 'reviewed',
+  WINNER: 'winner',
+  REJECTED: 'rejected',
 };
 
 export const TRANSACTION_STATUS = {
-  PENDING: "pending",
-  COMPLETED: "completed",
-  FAILED: "failed",
+  PENDING: 'pending',
+  COMPLETED: 'completed',
+  FAILED: 'failed',
 };
 
 export const USER_ROLES = {
-  DEVELOPER: "developer",
-  COMPANY: "company",
+  DEVELOPER: 'developer',
+  COMPANY: 'company',
 };
 
 export const BOUNTY_TYPES = {
-  CODING: "coding",
-  DATA_ANALYSIS: "data-analysis",
-  BLOCKCHAIN: "blockchain",
-  OTHER: "other",
+  CODING: 'coding',
+  DATA_ANALYSIS: 'data-analysis',
+  BLOCKCHAIN: 'blockchain',
+  OTHER: 'other',
 };

@@ -1,15 +1,15 @@
-import { Bitcoin, Code, Users } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Bitcoin, Code, Users } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 import {
   Card,
   CardContent,
   CardFooter,
   CardHeader,
-} from "../../../components/ui/card";
+} from '../../../components/ui/card';
 
-import { Button } from "../../../components/ui/button";
-import type { TBounty } from "../types";
+import { Button } from '../../../components/ui/button';
+import type { TBounty } from '../types';
 
 export const BountyCard = ({ bounty }: { bounty: TBounty }) => {
   return (
@@ -19,11 +19,11 @@ export const BountyCard = ({ bounty }: { bounty: TBounty }) => {
 
         <span
           className={`rounded-full px-3 py-1 text-sm font-medium ${
-            bounty.difficulty === "beginner"
-              ? "bg-green-100 text-green-800"
-              : bounty.difficulty === "intermediate"
-                ? "bg-yellow-100 text-yellow-800"
-                : "bg-red-100 text-red-800"
+            bounty.difficulty === 'beginner'
+              ? 'bg-green-100 text-green-800'
+              : bounty.difficulty === 'intermediate'
+                ? 'bg-yellow-100 text-yellow-800'
+                : 'bg-red-100 text-red-800'
           }`}
         >
           {bounty.difficulty}

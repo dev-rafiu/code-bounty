@@ -1,29 +1,29 @@
 // import { defineConfig } from "jest";
-import type { Config } from "jest";
+import type { Config } from 'jest';
 
 const config: Config = {
-  preset: "ts-jest",
-  testEnvironment: "jsdom",
+  preset: 'ts-jest',
+  testEnvironment: 'jsdom',
 
-  setupFiles: ["<rootDir>/src/test/polyfills.ts"],
+  setupFiles: ['<rootDir>/src/test/polyfills.ts'],
 
-  setupFilesAfterEnv: ["<rootDir>/src/test/setup.ts"],
+  setupFilesAfterEnv: ['<rootDir>/src/test/setup.ts'],
 
-  moduleFileExtensions: ["ts", "tsx", "js", "jsx"],
+  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
 
-  testMatch: ["<rootDir>/src/**/*.test.ts", "<rootDir>/src/**/*.test.tsx"],
+  testMatch: ['<rootDir>/src/**/*.test.ts', '<rootDir>/src/**/*.test.tsx'],
 
   transform: {
-    "^.+\\.tsx?$": [
-      "ts-jest",
+    '^.+\\.tsx?$': [
+      'ts-jest',
       {
-        tsconfig: "<rootDir>/tsconfig.test.json",
+        tsconfig: '<rootDir>/tsconfig.test.json',
       },
     ],
   },
 
   moduleNameMapper: {
-    "^@/(.*)$": "<rootDir>/src/$1",
+    '^@/(.*)$': '<rootDir>/src/$1',
   },
 
   clearMocks: true,
