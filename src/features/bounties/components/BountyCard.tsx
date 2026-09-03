@@ -47,12 +47,12 @@ export const BountyCard = ({ bounty }: { bounty: TBounty }) => {
 
         <div className="text-muted-foreground flex items-center justify-between text-sm">
           <p className="">
-            By
+            <span className="">By</span>
             <span className="text-primary-400 ml-2 font-bold">
               {bounty.company}
             </span>
           </p>
-          <span>Deadline: {bounty.deadline}</span>
+          <span className="">Deadline: {bounty.deadline}</span>
         </div>
       </CardContent>
 

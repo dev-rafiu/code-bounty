@@ -58,7 +58,7 @@ export const DevBountiesPage = () => {
 
           <div className="flex gap-2">
             <Select value={category} onValueChange={setCategory}>
-              <SelectTrigger className="bg-card w-full py-5 sm:w-[180px]">
+              <SelectTrigger className="bg-card w-full py-5 sm:w-45">
                 <SelectValue placeholder="All Categories" />
               </SelectTrigger>
 
@@ -71,7 +71,7 @@ export const DevBountiesPage = () => {
             </Select>
 
             <Select value={difficulty} onValueChange={setDifficulty}>
-              <SelectTrigger className="bg-card w-full py-5 sm:w-[180px]">
+              <SelectTrigger className="bg-card w-full py-5 sm:w-45">
                 <SelectValue placeholder="All Difficulties" />
               </SelectTrigger>
 

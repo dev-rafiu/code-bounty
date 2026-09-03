@@ -7,19 +7,53 @@ on:
     branches: [main]
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+   lint:
+     runs-on: ubuntu-latest
+     steps:
+       - name: checkout
+         uses: actions/checkout@v6
 
+       - name: setup nodejs
+         uses: actions/setup-node@v6
+         with:
+           node-version: 22
+           cache: "npm"
+
+       - name: install dep
+         run: npm ci
+
+       - name: run linter
+         run: npm run lint
+
+
+   test:
+    runs-on: ubuntu-latest
     steps:
       - name: checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: setup node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: 22
           cache: 'npm'
 
-      - run: npm ci
-      - run: npm run build --if-present
-      - run: npm test --if-present
+      - name: install dependencies
+        run: npm ci
+      - name: test code
+        run: npm run test
+
+   build:
+     needs: [lint, test]
+     runs-on: ubuntu-latest
+     steps:
+       - name: checkout
+         uses: actions/checkout@v4
+
+       - name: setup node.js
+         uses: actions/setup-node@v4
+         with:
+           node-version: 22
+           cache: 'npm'
+
+       - run: npm run build

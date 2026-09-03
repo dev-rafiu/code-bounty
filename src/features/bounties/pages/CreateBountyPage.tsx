@@ -31,7 +31,7 @@ export const CreateBountyPage = () => {
     description: '',
     category: '',
     difficulty: '',
-    bountyBTC: 0.001,
+    bountyBTC: 0.0001,
     deadline: undefined as Date | undefined,
   });
   const [isLoading, setIsLoading] = useState(false);
@@ -59,16 +59,18 @@ export const CreateBountyPage = () => {
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const isFormValid = Boolean(
+    form.title &&
+    form.description &&
+    form.category &&
+    form.difficulty &&
+    form.deadline,
+  );
+
+  const handleSubmit = (e: React.SubmitEvent) => {
     e.preventDefault();
 
-    if (
-      !form.title ||
-      !form.description ||
-      !form.category ||
-      !form.difficulty ||
-      !form.deadline
-    ) {
+    if (!isFormValid) {
       toast.error('Please fill in all required fields');
       return;
     }
@@ -93,15 +95,13 @@ export const CreateBountyPage = () => {
       .catch((error: any) => {
         toast.error(error?.message || 'Something went wrong');
       })
-      .finally(() => {
-        setIsLoading(false);
-      });
+      .finally(() => setIsLoading(false));
   };
 
   const handleCancel = () => resetForm();
 
   return (
-    <section className="min-h-screen">
+    <section className="flex min-h-screen items-center justify-center">
       <div className="bg-background mx-auto max-w-3xl space-y-4 rounded p-4 py-8 sm:px-6 lg:px-8">
         <p className="text-center text-xl font-medium">Create a new bounty</p>
 
@@ -115,8 +115,7 @@ export const CreateBountyPage = () => {
               name="title"
               value={form.title}
               onChange={handleChange}
-              placeholder="e.g. Build a React todo app"
-              required
+              placeholder="Build a React todo app"
             />
           </div>
 
@@ -129,7 +128,6 @@ export const CreateBountyPage = () => {
               value={form.description}
               onChange={handleChange}
               placeholder="Describe the bounty in detail..."
-              required
             />
           </div>
 
@@ -147,7 +145,7 @@ export const CreateBountyPage = () => {
                   <SelectValue placeholder="Select category" />
                 </SelectTrigger>
 
-                <SelectContent>
+                <SelectContent className="">
                   <SelectItem value="Coding">Coding</SelectItem>
                   <SelectItem value="Data Analysis">Data Analysis</SelectItem>
                   <SelectItem value="Blockchain">Blockchain</SelectItem>
@@ -166,6 +164,7 @@ export const CreateBountyPage = () => {
                 <SelectTrigger id="difficulty" className="w-full">
                   <SelectValue placeholder="Select difficulty" />
                 </SelectTrigger>
+
                 <SelectContent>
                   <SelectItem value="Beginner">Beginner</SelectItem>
                   <SelectItem value="Intermediate">Intermediate</SelectItem>
@@ -191,7 +190,6 @@ export const CreateBountyPage = () => {
                   onChange={handleChange}
                   className="pl-10"
                   placeholder="0.001"
-                  required
                 />
               </div>
             </div>
@@ -232,18 +230,15 @@ export const CreateBountyPage = () => {
           </div>
 
           {/* action buttons */}
-          <div className="flex space-x-4">
+          <div className="grid grid-cols-2 gap-4">
             <Button
               type="submit"
-              disabled={isLoading}
-              className="flex-1"
+              disabled={isLoading || !isFormValid}
+              className="cursor-pointer"
               size="lg"
             >
               {isLoading ? (
-                <>
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                  <span>Publishing Bounty...</span>
-                </>
+                <Loader2 className="h-4 w-4 animate-spin" />
               ) : (
                 'Publish Bounty'
               )}
@@ -252,6 +247,7 @@ export const CreateBountyPage = () => {
             <Button
               type="button"
               variant="outline"
+              className="cursor-pointer"
               onClick={handleCancel}
               size="lg"
             >
